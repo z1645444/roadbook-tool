@@ -1,5 +1,10 @@
 import type { ConstraintDraft } from '../constraints/constraint-draft.model';
 
+import {
+  evaluateClarificationNeed,
+  type ClarificationDecision
+} from './clarification-policy.service';
+
 export interface RecapPayload {
   summary: string;
   assumptions: string[];
@@ -52,6 +57,16 @@ export interface ClarificationEvaluation {
   prompt?: string;
 }
 
+export interface PointResolutionInput {
+  slot: 'origin' | 'destination' | 'waypoint';
+  confidence: number;
+  candidateCount: number;
+}
+
+export const evaluatePointResolution = (
+  input: PointResolutionInput
+): ClarificationDecision => evaluateClarificationNeed(input.slot, input.confidence, input.candidateCount);
+
 export const resolveNextSlotAction = (
   draft: ConstraintDraft,
   clarification: ClarificationEvaluation = { needsClarification: false }
@@ -79,7 +94,7 @@ export const resolveNextSlotAction = (
     recap: {
       summary: 'All required slots captured',
       assumptions: Object.entries(draft.assumptions ?? {}).map(
-        ([key, value]) => `${key}: ${value}`
+        ([key, value]) => `${key} assumption: ${value}`
       )
     },
     confirmationRequired: true,

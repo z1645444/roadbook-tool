@@ -41,9 +41,9 @@ planning draft.
 **Plans**: 3 plans
 
 Plans:
-- [ ] 01-01-PLAN.md - Bootstrap canonical constraint model and normalization/patch foundations.
-- [ ] 01-02-PLAN.md - Implement slot-driven intake, ambiguity blocking, and confirmation gate.
-- [ ] 01-03-PLAN.md - Wire canonical persistence and deterministic recap projection regression.
+- [x] 01-01-PLAN.md - Bootstrap canonical constraint model and normalization/patch foundations.
+- [x] 01-02-PLAN.md - Implement slot-driven intake, ambiguity blocking, and confirmation gate.
+- [x] 01-03-PLAN.md - Wire canonical persistence and deterministic recap projection regression.
 
 ### Phase 2: Routing Baseline and Reliability
 **Goal**: Users can generate dependable AMap-based cycling routes for accepted points in single-day

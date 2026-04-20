@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
+import { IntakeController } from '../../src/conversation/intake.controller';
 import { createConstraintDraft } from '../../src/constraints/constraint-draft.model';
 import { resolveNextSlotAction } from '../../src/conversation/slot-resolver.service';
 
@@ -95,5 +96,46 @@ describe('CONV-01 intake confirmation resolver', () => {
     if (next.status === 'ready_for_confirmation') {
       expect(next.confirmationRequired).toBe(true);
     }
+  });
+});
+
+describe('intake/turn controller confirmation gate', () => {
+  it('should return confirmationRequired and cannot proceed without confirmation', () => {
+    const controller = new IntakeController();
+
+    const response = controller.processTurn({
+      sessionId: 'session-1',
+      turnId: 'turn-1',
+      message: 'trip setup',
+      proposedSlots: [
+        { key: 'origin', value: '北京', confidence: 0.99 },
+        { key: 'destination', value: '杭州', confidence: 0.99 },
+        { key: 'waypoint', value: '苏州', confidence: 0.99 },
+        { key: 'dateRange', value: '2026-05-01 to 2026-05-03', confidence: 1 },
+        { key: 'tripDays', value: '3', confidence: 1 },
+        { key: 'rideWindow', value: '08:00-17:00', confidence: 1 },
+        { key: 'intensity', value: 'standard', confidence: 1 }
+      ]
+    });
+
+    expect(response.confirmationRequired).toBe(true);
+    expect(response.status).toBe('ready_for_confirmation');
+  });
+
+  it('should return clarificationPrompt when point ambiguity is present', () => {
+    const controller = new IntakeController();
+
+    const response = controller.processTurn({
+      sessionId: 'session-2',
+      turnId: 'turn-2',
+      message: 'ambiguous waypoint',
+      proposedSlots: [
+        { key: 'waypoint', value: '人民广场', confidence: 0.99, providerId: 'a,b' }
+      ]
+    });
+
+    expect(response.status).toBe('need_clarification');
+    expect(response.clarificationPrompt).toMatch(/clarify/i);
+    expect(response.confirmationRequired).toBe(true);
   });
 });

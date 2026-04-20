@@ -24,7 +24,7 @@ export const evaluateClarificationNeed = (
       ambiguous: true,
       assumed: false,
       clarificationNeeded: true,
-      prompt: `Found multiple candidates for ${slot}. Please choose one.`
+      prompt: `Found multiple candidates for ${slot}. Please clarify by choosing one.`
     };
   }
 

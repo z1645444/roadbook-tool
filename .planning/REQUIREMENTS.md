@@ -44,7 +44,8 @@
 ### Reliability and Safety Baseline
 
 - [ ] **RELY-01**: System handles AMap quota/auth/rate errors with clear user-facing fallback message.
-- [ ] **RELY-02**: System keeps canonical machine-readable itinerary model internally and renders Markdown from it.
+- [x] **RELY-02
+**: System keeps canonical machine-readable itinerary model internally and renders Markdown from it.
 - [ ] **RELY-03**: System records route generation metadata (time/provider hash) for reproducibility diagnostics.
 
 ## v2 Requirements

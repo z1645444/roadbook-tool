@@ -9,8 +9,10 @@
 
 - [ ] **CONV-01**: User can provide origin and destination through chat and get structured confirmation before planning.
 - [ ] **CONV-02**: User can provide one or more waypoints and system can parse them into normalized route points.
-- [ ] **CONV-03**: User can provide trip date range and total trip days for planning.
-- [ ] **CONV-04**: User can provide daily ride time window (for example, 08:00-17:00) and system applies it as hard constraint.
+- [x] **CONV-03
+**: User can provide trip date range and total trip days for planning.
+- [x] **CONV-04
+**: User can provide daily ride time window (for example, 08:00-17:00) and system applies it as hard constraint.
 - [ ] **CONV-05**: User can choose intensity profile (easy/standard/challenge) and system maps it to distance+duration caps.
 
 ### Routing and Optimization

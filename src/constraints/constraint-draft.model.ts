@@ -27,6 +27,20 @@ export interface RevisionEntry {
   timestampIso: string;
 }
 
+export interface RouteGenerationMetadata {
+  generatedAtIso: string;
+  provider: string;
+  endpoint: string;
+  requestFingerprint: string;
+  responseHash: string;
+  infocode?: string;
+}
+
+export interface RouteGenerationState {
+  latest: RouteGenerationMetadata;
+  history: RouteGenerationMetadata[];
+}
+
 export interface PointSlot {
   raw: string;
   status: SlotStatus;
@@ -51,6 +65,7 @@ export interface ConstraintDraft {
     rideWindow?: { raw: string; normalized?: NormalizedRideWindow };
     intensity?: { raw: string; normalized?: IntensityProfile };
   };
+  routeGeneration?: RouteGenerationState;
   assumptions?: Record<string, string>;
   revisionLog: RevisionEntry[];
 }

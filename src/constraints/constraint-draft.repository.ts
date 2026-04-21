@@ -2,6 +2,7 @@ import { mkdir, readFile, rename, writeFile } from 'node:fs/promises';
 import { dirname } from 'node:path';
 
 import type { ConstraintDraft, RevisionEntry } from './constraint-draft.model';
+import { safeParseConstraintDraft } from '../shared/validation/constraint-draft.schema';
 
 interface ConstraintDraftStorage {
   sessions: Record<string, ConstraintDraft>;
@@ -16,6 +17,17 @@ const cloneDraft = (draft: ConstraintDraft): ConstraintDraft =>
 
 const cloneStorage = (storage: ConstraintDraftStorage): ConstraintDraftStorage =>
   JSON.parse(JSON.stringify(storage)) as ConstraintDraftStorage;
+
+const validateDraft = (draft: ConstraintDraft): ConstraintDraft => {
+  const parsed = safeParseConstraintDraft(draft);
+  if (!parsed.success) {
+    const issue = parsed.error.issues[0];
+    const path = issue?.path?.join('.') ?? 'draft';
+    throw new Error(`Constraint draft validation failed at ${path}: ${issue?.message ?? 'invalid'}`);
+  }
+
+  return parsed.data;
+};
 
 export interface ConstraintDraftRepository {
   createDraft(sessionId: string, initialDraft: ConstraintDraft): Promise<ConstraintDraft>;
@@ -34,9 +46,10 @@ export class StorageBackedConstraintDraftRepository implements ConstraintDraftRe
 
   async createDraft(sessionId: string, initialDraft: ConstraintDraft): Promise<ConstraintDraft> {
     const storage = await this.readStorage();
+    const validated = validateDraft(initialDraft);
 
     storage.sessions[sessionId] = {
-      ...cloneDraft(initialDraft),
+      ...cloneDraft(validated),
       sessionId
     };
 
@@ -63,8 +76,9 @@ export class StorageBackedConstraintDraftRepository implements ConstraintDraftRe
     }
 
     const next = updater(cloneDraft(current));
+    const validated = validateDraft(next);
     storage.sessions[sessionId] = {
-      ...cloneDraft(next),
+      ...cloneDraft(validated),
       sessionId
     };
 

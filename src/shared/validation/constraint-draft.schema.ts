@@ -63,6 +63,15 @@ const normalizedRideWindowSchema = z.object({
   minutes: z.number().int().positive()
 });
 
+const routeGenerationMetadataSchema = z.object({
+  generatedAtIso: z.string().datetime({ offset: true }),
+  provider: z.string().min(1),
+  endpoint: z.string().min(1),
+  requestFingerprint: z.string().min(1),
+  responseHash: z.string().min(1),
+  infocode: z.string().min(1).optional()
+});
+
 export const constraintDraftSchema = z.object({
   id: z.string().min(1),
   sessionId: z.string().min(1),
@@ -95,6 +104,12 @@ export const constraintDraftSchema = z.object({
       })
       .optional()
   }),
+  routeGeneration: z
+    .object({
+      latest: routeGenerationMetadataSchema,
+      history: z.array(routeGenerationMetadataSchema)
+    })
+    .optional(),
   assumptions: z.record(z.string(), z.string()).optional(),
   revisionLog: z.array(
     z.object({

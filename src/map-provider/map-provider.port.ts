@@ -36,7 +36,41 @@ export interface BicyclingSegmentResult {
   info?: string;
 }
 
+export type LodgingCategory = 'hostel' | 'guesthouse' | 'hotel';
+
+export type LodgingPolicyStage = 'strict' | 'radius_12km' | 'radius_20km' | 'price_relaxed_20';
+
+export interface LodgingSearchInput {
+  anchor: {
+    providerId: string;
+    lng: number;
+    lat: number;
+  };
+  radiusMeters: number;
+  page: number;
+  sessionId: string;
+  dayIndex: number;
+  category: LodgingCategory;
+}
+
+export interface LodgingCandidate {
+  providerId: string;
+  name: string;
+  type: LodgingCategory;
+  distanceMeters: number;
+  rating: number | null;
+  priceCny: number | null;
+  policyStage: LodgingPolicyStage;
+}
+
+export interface LodgingSearchResult {
+  candidates: LodgingCandidate[];
+  infocode?: string;
+  info?: string;
+}
+
 export interface MapProvider {
   geocodePoint(input: GeocodePointInput): Promise<GeocodePointResult>;
   routeBicyclingSegment(input: BicyclingSegmentInput): Promise<BicyclingSegmentResult>;
+  searchLodgingAround?(input: LodgingSearchInput): Promise<LodgingSearchResult>;
 }

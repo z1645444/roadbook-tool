@@ -6,7 +6,7 @@ import {
 interface MapAmapErrorInput {
   infocode?: string;
   info?: string;
-  endpoint: 'geocode' | 'bicycling';
+  endpoint: 'geocode' | 'bicycling' | 'lodging';
 }
 
 const CATEGORY_MESSAGES: Record<RoutingFallbackCategory, string> = {

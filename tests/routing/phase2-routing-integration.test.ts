@@ -9,6 +9,7 @@ import type { MapProvider } from '../../src/map-provider/map-provider.port';
 import { RoutingOrchestratorService } from '../../src/routing/routing-orchestrator.service';
 import { RoutingFallbackError } from '../../src/reliability/routing-fallback.error';
 import { StorageBackedConstraintDraftRepository } from '../../src/constraints/constraint-draft.repository';
+import type { IntakeTurnDto } from '../../src/shared/validation/intake-turn.dto';
 
 const createHarness = async (provider: MapProvider) => {
   const storageDir = await mkdtemp(join(tmpdir(), 'roadbook-phase2-e2e-'));
@@ -20,7 +21,7 @@ const createHarness = async (provider: MapProvider) => {
   return { controller };
 };
 
-const basePayload = {
+const basePayload: IntakeTurnDto = {
   sessionId: 'phase2-session',
   turnId: 'phase2-turn',
   message: 'phase2 integration',
@@ -32,7 +33,7 @@ const basePayload = {
     { key: 'rideWindow', value: '08:00-17:00', confidence: 1 },
     { key: 'intensity', value: 'standard', confidence: 1 }
   ]
-} as const;
+};
 
 describe('ROUT-01 integration: ambiguous geocode blocks route generation', () => {
   it('should return clarification state and skip route generation for ambiguous points', async () => {

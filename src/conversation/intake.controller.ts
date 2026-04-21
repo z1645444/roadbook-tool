@@ -17,10 +17,38 @@ export interface IntakeTurnResponse {
   clarificationPrompt: string | null;
   recap: { summary: string; assumptions: string[] } | null;
   confirmationRequired: boolean;
-  routePlan: unknown;
+  routePlan: Array<{
+    dayIndex: number;
+    segments: Array<{
+      from: {
+        providerId: string;
+        name: string;
+        lng: number;
+        lat: number;
+      };
+      to: {
+        providerId: string;
+        name: string;
+        lng: number;
+        lat: number;
+      };
+      distanceMeters: number;
+      durationSeconds: number;
+      polyline: Array<{ lng: number; lat: number }>;
+    }>;
+    totalDistanceMeters: number;
+    totalDurationSeconds: number;
+  }> | null;
   routingStatus: 'idle' | 'ready' | 'needs_clarification' | 'fallback';
   fallbackMessage: string | null;
-  routeMetadata: unknown;
+  routeMetadata: {
+    generatedAtIso: string;
+    provider: string;
+    endpoint: string;
+    requestFingerprint: string;
+    responseHash: string;
+    infocode?: string;
+  } | null;
 }
 
 @Controller('conversation/intake')

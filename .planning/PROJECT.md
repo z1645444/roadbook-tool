@@ -12,13 +12,14 @@ Given rider constraints and trip intent, the tool reliably produces an actionabl
 
 ### Validated
 
-(None yet — ship to validate)
+- [x] Users can provide start, end, and optional waypoints in a chat flow.
+- [x] Users can define both trip duration and daily riding time windows.
+- [x] Users can select riding intensity using distance + duration constraints.
+- [x] System keeps a canonical machine-readable itinerary model and renders recap from it.
+- Validated in Phase 1: conversation-intake-and-constraint-model
 
 ### Active
 
-- [ ] User can provide start, end, and optional waypoints in a chat flow
-- [ ] User can define both trip duration and daily riding time windows
-- [ ] User can select riding intensity using distance + duration constraints
 - [ ] System can reorder waypoints to optimize route feasibility
 - [ ] System can generate a Markdown roadbook for single-day and multi-day trips
 - [ ] System can recommend nearby hostels, guesthouses, and hotels by score and price rules
@@ -65,17 +66,17 @@ Given rider constraints and trip intent, the tool reliably produces an actionabl
 
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
-| Build as a chat skill first | Validate planning logic before UI expansion | — Pending |
+| Build as a chat skill first | Validate planning logic before UI expansion | Implemented in Phase 1 |
 | Support single-day and multi-day in v1 | Real cyclist trips require both use cases | — Pending |
-| Model riding intensity with distance + duration | Better reflects physical load than one metric | — Pending |
+| Model riding intensity with distance + duration | Better reflects physical load than one metric | Implemented in Phase 1 intake model |
 | Use AMap for v1 and defer custom map integration | Lower implementation risk while preserving future extensibility | — Pending |
-| Output roadbook as Markdown | Immediate usability and low integration overhead | — Pending |
+| Output roadbook as Markdown | Immediate usability and low integration overhead | Canonical recap projection implemented in Phase 1 |
 
 ## Evolution
 
 This document evolves at phase transitions and milestone boundaries.
 
-**After each phase transition** (via `$gsd-transition`):
+**After each phase transition** (via internal transition workflow):
 1. Requirements invalidated? -> Move to Out of Scope with reason
 2. Requirements validated? -> Move to Validated with phase reference
 3. New requirements emerged? -> Add to Active
@@ -89,4 +90,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-20 after initialization*
+*Last updated: 2026-04-21 after Phase 1 completion*

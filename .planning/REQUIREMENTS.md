@@ -79,11 +79,11 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| CONV-01 | Phase 1 | Pending |
-| CONV-02 | Phase 1 | Pending |
-| CONV-03 | Phase 1 | Pending |
-| CONV-04 | Phase 1 | Pending |
-| CONV-05 | Phase 1 | Pending |
+| CONV-01 | Phase 1 | Complete |
+| CONV-02 | Phase 1 | Complete |
+| CONV-03 | Phase 1 | Complete |
+| CONV-04 | Phase 1 | Complete |
+| CONV-05 | Phase 1 | Complete |
 | ROUT-01 | Phase 2 | Pending |
 | ROUT-02 | Phase 2 | Pending |
 | ROUT-03 | Phase 3 | Pending |
@@ -99,7 +99,7 @@
 | BOOK-03 | Phase 5 | Pending |
 | BOOK-04 | Phase 5 | Pending |
 | RELY-01 | Phase 2 | Pending |
-| RELY-02 | Phase 1 | Pending |
+| RELY-02 | Phase 1 | Complete |
 | RELY-03 | Phase 2 | Pending |
 
 **Coverage:**

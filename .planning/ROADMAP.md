@@ -12,7 +12,7 @@ baseline, multi-day optimization, lodging policy, then user-facing roadbook outp
 - Integer phases (1, 2, 3): Planned milestone work
 - Decimal phases (2.1, 2.2): Urgent insertions (marked with INSERTED)
 
-- [ ] **Phase 1: Conversation Intake and Constraint Model** - Capture planning inputs in chat and
+- [x] **Phase 1: Conversation Intake and Constraint Model** - Capture planning inputs in chat and
       persist a canonical itinerary draft.
 - [ ] **Phase 2: Routing Baseline and Reliability** - Produce reliable single-day routing with
       AMap error handling and reproducibility metadata.
@@ -106,7 +106,7 @@ fallbacks in sparse areas.
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Conversation Intake and Constraint Model | 0/TBD | Not started | - |
+| 1. Conversation Intake and Constraint Model | 3/3 | Complete | 2026-04-21 |
 | 2. Routing Baseline and Reliability | 0/TBD | Not started | - |
 | 3. Multi-day Optimization and Stage Split | 0/TBD | Not started | - |
 | 4. Lodging Recommendation Policy | 0/TBD | Not started | - |

@@ -14,6 +14,9 @@ const DEFAULT_STORAGE: ConstraintDraftStorage = {
 const cloneDraft = (draft: ConstraintDraft): ConstraintDraft =>
   JSON.parse(JSON.stringify(draft)) as ConstraintDraft;
 
+const cloneStorage = (storage: ConstraintDraftStorage): ConstraintDraftStorage =>
+  JSON.parse(JSON.stringify(storage)) as ConstraintDraftStorage;
+
 export interface ConstraintDraftRepository {
   createDraft(sessionId: string, initialDraft: ConstraintDraft): Promise<ConstraintDraft>;
   getBySessionId(sessionId: string): Promise<ConstraintDraft | null>;
@@ -85,12 +88,12 @@ export class StorageBackedConstraintDraftRepository implements ConstraintDraftRe
       const parsed = JSON.parse(raw) as ConstraintDraftStorage;
 
       if (!parsed.sessions || typeof parsed.sessions !== 'object') {
-        return cloneDraft(DEFAULT_STORAGE);
+        return cloneStorage(DEFAULT_STORAGE);
       }
 
       return parsed;
     } catch {
-      return cloneDraft(DEFAULT_STORAGE);
+      return cloneStorage(DEFAULT_STORAGE);
     }
   }
 

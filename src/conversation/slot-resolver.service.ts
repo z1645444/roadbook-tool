@@ -34,18 +34,22 @@ const slotIsAccepted = (
   draft: ConstraintDraft,
   slot: keyof ConstraintDraft['slots']
 ): boolean => {
+  if (slot === 'waypoints') {
+    return Array.isArray(draft.slots.waypoints);
+  }
+
   const value = draft.slots[slot];
 
   if (!value) {
     return false;
   }
 
-  if (slot === 'waypoints') {
-    return Array.isArray(value);
-  }
-
   if (slot === 'origin' || slot === 'destination') {
-    return value.status === 'accepted';
+    return (
+      typeof value === 'object' &&
+      'status' in value &&
+      value.status === 'accepted'
+    );
   }
 
   return true;

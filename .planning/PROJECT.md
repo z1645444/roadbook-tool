@@ -19,14 +19,17 @@ Given rider constraints and trip intent, the tool reliably produces an actionabl
 - [x] System can geocode accepted points, block ambiguous candidates, and generate ordered
   bicycling segments in single-day mode with deterministic fallback handling.
 - [x] System records route generation metadata (provider/time/hash) for reproducibility diagnostics.
+- [x] System can recommend nearby hostels, guesthouses, and hotels by score and price policy rules
+  with deterministic fallback traces.
 - Validated in Phase 1: conversation-intake-and-constraint-model
 - Validated in Phase 2: routing-baseline-and-reliability
+- Validated in Phase 3: multi-day-optimization-and-stage-split
+- Validated in Phase 4: lodging-recommendation-policy
 
 ### Active
 
-- [ ] System can reorder waypoints to optimize route feasibility
+- [x] System can reorder waypoints to optimize route feasibility
 - [ ] System can generate a Markdown roadbook for single-day and multi-day trips
-- [ ] System can recommend nearby hostels, guesthouses, and hotels by score and price rules
 
 ### Out of Scope
 
@@ -77,6 +80,11 @@ Given rider constraints and trip intent, the tool reliably produces an actionabl
 | Output roadbook as Markdown | Immediate usability and low integration overhead | Canonical recap projection implemented in Phase 1 |
 | Route generation fallback policy uses deterministic category mapping | Prevent raw provider failures from leaking into chat UX | Implemented in Phase 2 |
 
+## Current State
+
+Phase 4 complete — lodging recommendation retrieval/policy/integration is implemented and
+regression-verified.
+
 ## Evolution
 
 This document evolves at phase transitions and milestone boundaries.
@@ -95,4 +103,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-21 after Phase 2 completion*
+*Last updated: 2026-04-21 after Phase 4 completion*

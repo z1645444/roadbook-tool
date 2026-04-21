@@ -98,7 +98,12 @@ fallbacks in sparse areas.
      rules.
   3. User sees a fallback recommendation strategy when strict filters return no candidates.
   4. User can compare shortlisted lodging entries with score and price details.
-**Plans**: TBD
+**Plans**: 3 plans
+
+Plans:
+- [x] 04-01-PLAN.md - Extend provider/schema contracts and implement AMap lodging adapter foundation.
+- [x] 04-02-PLAN.md - Implement strict category policy filtering, ranking, and staged fallback engine.
+- [x] 04-03-PLAN.md - Wire lodging policy into routing/controller flow and add phase integration regressions.
 
 ### Phase 5: Markdown Roadbook Delivery
 **Goal**: Users receive an actionable Markdown roadbook that is easy to validate and execute.
@@ -118,7 +123,7 @@ fallbacks in sparse areas.
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Conversation Intake and Constraint Model | 3/3 | Complete | 2026-04-21 |
-| 2. Routing Baseline and Reliability | 0/TBD | Not started | - |
-| 3. Multi-day Optimization and Stage Split | 0/TBD | Not started | - |
-| 4. Lodging Recommendation Policy | 0/TBD | Not started | - |
+| 2. Routing Baseline and Reliability | 4/4 | Complete | 2026-04-21 |
+| 3. Multi-day Optimization and Stage Split | 3/3 | Complete | 2026-04-21 |
+| 4. Lodging Recommendation Policy | 3/3 | Complete | 2026-04-21 |
 | 5. Markdown Roadbook Delivery | 0/TBD | Not started | - |

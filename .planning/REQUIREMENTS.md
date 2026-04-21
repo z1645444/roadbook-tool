@@ -28,11 +28,11 @@
 
 ### Lodging Recommendations
 
-- [ ] **LODG-01**: System can search lodging candidates near nightly stop points via AMap POI APIs.
-- [ ] **LODG-02**: Hostel recommendations satisfy rating >= 4.0 and price range 40-100 CNY.
-- [ ] **LODG-03**: Guesthouse recommendations satisfy rating >= 4.0 and price <= 200 CNY.
-- [ ] **LODG-04**: Hotel recommendations satisfy rating >= 4.0 and price <= 200 CNY.
-- [ ] **LODG-05**: System presents fallback strategy when strict filters return no results.
+- [x] **LODG-01**: System can search lodging candidates near nightly stop points via AMap POI APIs.
+- [x] **LODG-02**: Hostel recommendations satisfy rating >= 4.0 and price range 40-100 CNY.
+- [x] **LODG-03**: Guesthouse recommendations satisfy rating >= 4.0 and price <= 200 CNY.
+- [x] **LODG-04**: Hotel recommendations satisfy rating >= 4.0 and price <= 200 CNY.
+- [x] **LODG-05**: System presents fallback strategy when strict filters return no results.
 
 ### Roadbook Output
 
@@ -89,11 +89,11 @@
 | ROUT-03 | Phase 3 | Pending |
 | ROUT-04 | Phase 3 | Pending |
 | ROUT-05 | Phase 2 | Pending |
-| LODG-01 | Phase 4 | Pending |
-| LODG-02 | Phase 4 | Pending |
-| LODG-03 | Phase 4 | Pending |
-| LODG-04 | Phase 4 | Pending |
-| LODG-05 | Phase 4 | Pending |
+| LODG-01 | Phase 4 | Complete |
+| LODG-02 | Phase 4 | Complete |
+| LODG-03 | Phase 4 | Complete |
+| LODG-04 | Phase 4 | Complete |
+| LODG-05 | Phase 4 | Complete |
 | BOOK-01 | Phase 5 | Pending |
 | BOOK-02 | Phase 5 | Pending |
 | BOOK-03 | Phase 5 | Pending |
@@ -109,4 +109,4 @@
 
 ---
 *Requirements defined: 2026-04-20*
-*Last updated: 2026-04-20 after initial definition*
+*Last updated: 2026-04-21 after Phase 4 completion*

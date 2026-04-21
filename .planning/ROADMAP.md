@@ -80,7 +80,12 @@ boundaries.
   2. User planning multiple days gets day stages that satisfy selected intensity caps and daily
      time-window constraints.
   3. User can see explicit daily stage boundaries and overnight stop points in the generated plan.
-**Plans**: TBD
+**Plans**: 3 plans
+
+Plans:
+- [x] 03-01-PLAN.md - Build deterministic endpoint-preserving waypoint optimization core with runtime contract validation.
+- [x] 03-02-PLAN.md - Implement daily stage splitting with intensity and ride-window hard constraints.
+- [x] 03-03-PLAN.md - Integrate optimization and stage split into orchestration and chat response regression flow.
 
 ### Phase 4: Lodging Recommendation Policy
 **Goal**: Users can view policy-compliant lodging options near nightly stops, with graceful

@@ -319,23 +319,23 @@ if (!parsed.isValid) {
 
 | # | Claim | Section | Risk if Wrong |
 |---|-------|---------|---------------|
-| A1 | Canonical draft should persist in DB-backed storage within Phase 1 (not memory-only) | Architectural Responsibility Map | Rework in Phase 2 if persistence scope is intentionally deferred |
-| A2 | Rule-only parsing is insufficient for conversational intake variance in this domain | Standard Stack / Alternatives | May over-engineer extraction path if prompts are highly constrained |
-| A3 | `pino` should be introduced in Phase 1 for intake auditability | Standard Stack / Supporting | Could add unnecessary setup if logging is deferred to later phases |
-| A4 | Recap/model drift is best prevented by full recap regeneration each revision | Common Pitfalls | Might constrain UX if partial recap strategy is desired |
-| A5 | Time-window semantic validation should reject overnight windows by default | Common Pitfalls | Could conflict with product intent if overnight rides should be supported |
+| A1 | `pino` should be introduced in Phase 1 for intake auditability | Standard Stack / Supporting | Could add unnecessary setup if logging is deferred to later phases |
+| A2 | Recap/model drift is best prevented by full recap regeneration each revision | Common Pitfalls | Might constrain UX if partial recap strategy is desired |
+| A3 | Time-window semantic validation should reject overnight windows by default | Common Pitfalls | Could conflict with product intent if overnight rides should be supported |
 
-## Open Questions
+## Open Questions (RESOLVED)
 
-1. **Should Phase 1 include durable DB persistence or an in-memory repository with stable interface?**
-   - What we know: D-05 requires persistence of raw and normalized values [VERIFIED: local repo files].
-   - What's unclear: Whether persistence must be production DB in this phase or can be adapter-backed memory for early validation [ASSUMED].
-   - Recommendation: Lock this in planning as a Wave 0 architecture decision.
+1. **Persistence tier for canonical draft storage**
+   - **Decision:** Phase 1 uses a DB/storage-backed repository adapter in-phase (PostgreSQL/Storage tier),
+     not an in-memory runtime adapter, to satisfy D-05 traceability and Architectural Responsibility Map
+     ownership.
+   - **Plan impact:** `01-03-PLAN.md` Task 1 now explicitly requires DB/storage-backed persistence and
+     forbids memory-backed runtime persistence.
 
-2. **Will LLM-assisted extraction be in scope in Phase 1, or deterministic parser-only first?**
-   - What we know: Product is chat-first and stack includes OpenAI SDK [VERIFIED: local repo files].
-   - What's unclear: Whether Phase 1 acceptance requires LLM extraction behavior vs deterministic input parsing [ASSUMED].
-   - Recommendation: Plan a parser abstraction (`extractConstraints`) so either strategy can satisfy CONV requirements.
+2. **Constraint extraction strategy in Phase 1**
+   - **Decision:** Phase 1 is deterministic parser-first (no LLM runtime dependency), while exposing an
+     extractor contract so later phases can add an LLM-backed adapter behind the same interface.
+   - **Plan impact:** `01-02-PLAN.md` adds an extractor interface and parser-first resolver behavior.
 
 ## Environment Availability
 

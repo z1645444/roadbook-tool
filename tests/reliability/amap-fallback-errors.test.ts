@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 
 import { mapAmapError } from '../../src/map-provider/amap-error.mapper';
+import { AmapBicyclingAdapter } from '../../src/map-provider/amap-bicycling.adapter';
+import { AmapGeocodeAdapter } from '../../src/map-provider/amap-geocode.adapter';
 import { RoutingFallbackError } from '../../src/reliability/routing-fallback.error';
 
 describe('RELY-01 amap fallback mapping and safe user messages', () => {
@@ -29,6 +31,48 @@ describe('RELY-01 amap fallback mapping and safe user messages', () => {
       expect(error.userMessage).not.toContain('key=');
       expect(error.userMessage).not.toContain('http');
       expect(error.userMessage).not.toContain('stack');
+    }
+  });
+
+  it('should throw sanitized fallback error when geocode transport fails', async () => {
+    const originalFetch = global.fetch;
+    global.fetch = async () => {
+      throw new Error('network failed');
+    };
+
+    try {
+      const adapter = new AmapGeocodeAdapter('test-key');
+      await expect(adapter.geocodePoint({ query: '北京' })).rejects.toMatchObject({
+        category: 'unknown_provider_error'
+      });
+      await expect(adapter.geocodePoint({ query: '北京' })).rejects.not.toMatchObject({
+        userMessage: expect.stringContaining('test-key')
+      });
+    } finally {
+      global.fetch = originalFetch;
+    }
+  });
+
+  it('should throw mapped fallback error when bicycling endpoint fails', async () => {
+    const originalFetch = global.fetch;
+    global.fetch = async () =>
+      ({
+        ok: false,
+        json: async () => ({ errcode: 10029, errmsg: 'too many requests' })
+      } as Response);
+
+    try {
+      const adapter = new AmapBicyclingAdapter('test-key');
+      await expect(
+        adapter.routeBicyclingSegment({
+          from: { lng: 120.1, lat: 30.2 },
+          to: { lng: 120.2, lat: 30.3 }
+        })
+      ).rejects.toMatchObject({
+        category: 'rate_limited'
+      });
+    } finally {
+      global.fetch = originalFetch;
     }
   });
 });

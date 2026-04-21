@@ -9,8 +9,7 @@ export const dayBoundarySchema = z.object({
   overnightStopPoint: routePointSchema.nullable()
 });
 
-export const multidayDayStageSchema = z.object({
-  dayBoundary: dayBoundarySchema,
+export const multidayDayStageSchema = dayBoundarySchema.extend({
   totalDistanceMeters: z.number().nonnegative(),
   totalDurationSeconds: z.number().nonnegative(),
   segments: z.array(routeSegmentSchema)

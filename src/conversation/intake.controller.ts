@@ -7,9 +7,14 @@ import {
   type SlotResolutionState
 } from './slot-resolver.service';
 import type { IntakeTurnDto } from '../shared/validation/intake-turn.dto';
-import { createConstraintDraft, type ConstraintDraft } from '../constraints/constraint-draft.model';
+import {
+  createConstraintDraft,
+  type ConstraintDraft,
+  type IntensityProfile
+} from '../constraints/constraint-draft.model';
 import type { ConstraintDraftRepository } from '../constraints/constraint-draft.repository';
 import type { RoutingOrchestratorService } from '../routing/routing-orchestrator.service';
+import { parseRideWindow } from '../shared/time/time-window.parser';
 
 export interface IntakeTurnResponse {
   status: SlotResolutionState['status'] | 'routing_ready' | 'routing_fallback';
@@ -19,6 +24,24 @@ export interface IntakeTurnResponse {
   confirmationRequired: boolean;
   routePlan: Array<{
     dayIndex: number;
+    startPoint: {
+      providerId: string;
+      name: string;
+      lng: number;
+      lat: number;
+    } | null;
+    endPoint: {
+      providerId: string;
+      name: string;
+      lng: number;
+      lat: number;
+    } | null;
+    overnightStopPoint: {
+      providerId: string;
+      name: string;
+      lng: number;
+      lat: number;
+    } | null;
     segments: Array<{
       from: {
         providerId: string;
@@ -156,6 +179,14 @@ export class IntakeController {
     };
   }
 
+  private normalizeIntensity(raw: string): IntensityProfile {
+    const normalized = raw.trim().toLowerCase();
+    if (normalized === 'easy' || normalized === 'challenge') {
+      return normalized;
+    }
+    return 'standard';
+  }
+
   private toResponse(state: SlotResolutionState): IntakeTurnResponse {
     if (state.status === 'need_slot') {
       return {
@@ -265,20 +296,27 @@ export class IntakeController {
       }
 
       if (slot.key === 'rideWindow') {
+        const parsedRideWindow = (() => {
+          try {
+            return parseRideWindow(slot.value).normalized;
+          } catch {
+            return {
+              start: '08:00',
+              end: '17:00',
+              minutes: 540
+            };
+          }
+        })();
         draft.slots.rideWindow = {
           raw: slot.value,
-          normalized: {
-            start: '08:00',
-            end: '17:00',
-            minutes: 540
-          }
+          normalized: parsedRideWindow
         };
       }
 
       if (slot.key === 'intensity') {
         draft.slots.intensity = {
           raw: slot.value,
-          normalized: 'standard'
+          normalized: this.normalizeIntensity(slot.value)
         };
       }
     }

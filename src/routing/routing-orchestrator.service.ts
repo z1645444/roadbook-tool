@@ -3,6 +3,8 @@ import type { MapProvider } from '../map-provider/map-provider.port';
 import { buildOrderedSegments } from './segment-routing.service';
 import { buildRouteGenerationMetadata } from '../reliability/repro-metadata.service';
 import { RoutingFallbackError } from '../reliability/routing-fallback.error';
+import { optimizeWaypointSequence } from './waypoint-optimizer.service';
+import { splitRouteIntoDayStages } from './day-stage-splitter.service';
 
 interface ClarificationPayload {
   needed: true;
@@ -17,6 +19,11 @@ interface RoutingReadyPayload {
 
 interface RouteDayPlan {
   dayIndex: number;
+  startPoint: Awaited<ReturnType<typeof buildOrderedSegments>>['segments'][number]['from'] | null;
+  endPoint: Awaited<ReturnType<typeof buildOrderedSegments>>['segments'][number]['to'] | null;
+  overnightStopPoint:
+    | Awaited<ReturnType<typeof buildOrderedSegments>>['segments'][number]['to']
+    | null;
   segments: Awaited<ReturnType<typeof buildOrderedSegments>>['segments'];
   totalDistanceMeters: number;
   totalDurationSeconds: number;
@@ -93,7 +100,12 @@ export class RoutingOrchestratorService {
     }
 
     try {
-      const segmentResult = await buildOrderedSegments(disambiguatedPoints, this.provider);
+      const tripDays = draft.slots.tripDays?.normalized ?? 1;
+      const pointsForRouting =
+        tripDays > 1
+          ? (await optimizeWaypointSequence(disambiguatedPoints, this.provider)).optimizedPoints
+          : disambiguatedPoints;
+      const segmentResult = await buildOrderedSegments(pointsForRouting, this.provider);
       const routeMetadata = buildRouteGenerationMetadata({
         provider: 'amap',
         endpoint: '/v4/direction/bicycling',
@@ -120,16 +132,24 @@ export class RoutingOrchestratorService {
         };
       });
 
+      const routePlan: RouteDayPlan[] =
+        tripDays > 1
+          ? splitRouteIntoDayStages(segmentResult.segments, draft, pointsForRouting)
+          : [
+              {
+                dayIndex: 1,
+                startPoint: segmentResult.segments[0]?.from ?? null,
+                endPoint: segmentResult.segments.at(-1)?.to ?? null,
+                overnightStopPoint: null,
+                segments: segmentResult.segments,
+                totalDistanceMeters: segmentResult.totalDistanceMeters,
+                totalDurationSeconds: segmentResult.totalDurationSeconds
+              }
+            ];
+
       return {
         routingStatus: 'ready',
-        routePlan: [
-          {
-            dayIndex: 1,
-            segments: segmentResult.segments,
-            totalDistanceMeters: segmentResult.totalDistanceMeters,
-            totalDurationSeconds: segmentResult.totalDurationSeconds
-          }
-        ],
+        routePlan,
         fallbackMessage: null,
         routeMetadata,
         clarification: { needed: false }

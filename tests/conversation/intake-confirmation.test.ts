@@ -203,6 +203,9 @@ describe('intake/turn controller confirmation gate', () => {
     expect(response.status).toBe('routing_ready');
     expect(response.routingStatus).toBe('ready');
     expect(response.routePlan).not.toBeNull();
+    expect(response.routePlan?.[0]?.startPoint?.providerId).toContain('北京');
+    expect(response.routePlan?.[0]?.endPoint?.providerId).toContain('杭州');
+    expect(response.routePlan?.[0]?.overnightStopPoint).toBeNull();
     expect(response.fallbackMessage).toBeNull();
     expect(response.routeMetadata).not.toBeNull();
   });

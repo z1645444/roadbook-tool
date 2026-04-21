@@ -88,6 +88,9 @@ describe('ROUT-05 single-day routing orchestrator guard', () => {
     expect(result.routePlan).not.toBeNull();
     expect(result.routePlan).toHaveLength(1);
     expect(result.routePlan?.[0].dayIndex).toBe(1);
+    expect(result.routePlan?.[0].startPoint?.providerId).toContain('北京');
+    expect(result.routePlan?.[0].endPoint?.providerId).toContain('杭州');
+    expect(result.routePlan?.[0].overnightStopPoint).toBeNull();
   });
 
   it('should block routing with clarification when geocode candidates are ambiguous', async () => {

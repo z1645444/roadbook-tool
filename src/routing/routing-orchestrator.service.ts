@@ -5,6 +5,10 @@ import { buildRouteGenerationMetadata } from '../reliability/repro-metadata.serv
 import { RoutingFallbackError } from '../reliability/routing-fallback.error';
 import { optimizeWaypointSequence } from './waypoint-optimizer.service';
 import { splitRouteIntoDayStages } from './day-stage-splitter.service';
+import {
+  LodgingPolicyService,
+  type DayLodgingRecommendations
+} from './lodging-policy.service';
 
 interface ClarificationPayload {
   needed: true;
@@ -27,6 +31,7 @@ interface RouteDayPlan {
   segments: Awaited<ReturnType<typeof buildOrderedSegments>>['segments'];
   totalDistanceMeters: number;
   totalDurationSeconds: number;
+  lodging: DayLodgingRecommendations | null;
 }
 
 export interface RoutingOrchestratorResult {
@@ -40,7 +45,8 @@ export interface RoutingOrchestratorResult {
 export class RoutingOrchestratorService {
   constructor(
     private readonly provider: MapProvider,
-    private readonly repository: ConstraintDraftRepository
+    private readonly repository: ConstraintDraftRepository,
+    private readonly lodgingPolicyService: LodgingPolicyService = new LodgingPolicyService(provider)
   ) {}
 
   async planRouteForSession(sessionId: string): Promise<RoutingOrchestratorResult> {
@@ -134,7 +140,10 @@ export class RoutingOrchestratorService {
 
       const routePlan: RouteDayPlan[] =
         tripDays > 1
-          ? splitRouteIntoDayStages(segmentResult.segments, draft, pointsForRouting)
+          ? splitRouteIntoDayStages(segmentResult.segments, draft, pointsForRouting).map((day) => ({
+              ...day,
+              lodging: null
+            }))
           : [
               {
                 dayIndex: 1,
@@ -143,9 +152,45 @@ export class RoutingOrchestratorService {
                 overnightStopPoint: null,
                 segments: segmentResult.segments,
                 totalDistanceMeters: segmentResult.totalDistanceMeters,
-                totalDurationSeconds: segmentResult.totalDurationSeconds
+                totalDurationSeconds: segmentResult.totalDurationSeconds,
+                lodging: null
               }
             ];
+
+      if (tripDays > 1) {
+        for (const day of routePlan) {
+          if (!day.overnightStopPoint) {
+            day.lodging = null;
+            continue;
+          }
+
+          try {
+            day.lodging = await this.lodgingPolicyService.buildLodgingRecommendations({
+              sessionId,
+              dayIndex: day.dayIndex,
+              anchor: {
+                providerId: day.overnightStopPoint.providerId,
+                lng: day.overnightStopPoint.lng,
+                lat: day.overnightStopPoint.lat
+              }
+            });
+          } catch (error) {
+            if (error instanceof RoutingFallbackError) {
+              day.lodging = {
+                policyStatus: 'no_match',
+                fallbackTrace: ['provider_fallback'],
+                categories: {
+                  hostel: [],
+                  guesthouse: [],
+                  hotel: []
+                }
+              };
+              continue;
+            }
+            throw error;
+          }
+        }
+      }
 
       return {
         routingStatus: 'ready',

@@ -210,6 +210,86 @@ describe('intake/turn controller confirmation gate', () => {
     expect(response.routeMetadata).not.toBeNull();
   });
 
+  it('should include routePlan lodging categories and fallbackTrace on multiday routing_ready response', async () => {
+    const storageDir = await mkdtemp(join(tmpdir(), 'roadbook-controller-lodging-'));
+    const repository = new StorageBackedConstraintDraftRepository(
+      join(storageDir, 'storage/constraint-drafts.json')
+    );
+
+    const provider: MapProvider = {
+      async geocodePoint(input) {
+        const lookup: Record<string, { providerId: string; lng: number; lat: number }> = {
+          北京: { providerId: 'origin', lng: 116.4, lat: 39.9 },
+          途经点: { providerId: 'waypoint', lng: 116.9, lat: 39.95 },
+          杭州: { providerId: 'destination', lng: 120.2, lat: 30.25 }
+        };
+        const item = lookup[input.query];
+        return {
+          candidates: [
+            {
+              provider: 'amap',
+              providerId: item.providerId,
+              name: input.query,
+              lng: item.lng,
+              lat: item.lat,
+              confidence: 0.99
+            }
+          ]
+        };
+      },
+      async routeBicyclingSegment(input) {
+        return {
+          distanceMeters: 2800,
+          durationSeconds: 1800,
+          polyline: [input.from, input.to]
+        };
+      },
+      async searchLodgingAround(input) {
+        return {
+          candidates: [
+            {
+              providerId: `${input.category}-ok`,
+              name: `${input.category}-ok`,
+              type: input.category,
+              distanceMeters: 500,
+              rating: 4.4,
+              priceCny: input.category === 'hostel' ? 90 : 180,
+              policyStage: 'strict'
+            }
+          ]
+        };
+      }
+    };
+
+    const orchestrator = new RoutingOrchestratorService(provider, repository);
+    const controller = new IntakeController(orchestrator, repository);
+
+    const response = await controller.processTurn({
+      sessionId: 'session-3-lodging',
+      turnId: 'turn-3-lodging',
+      message: 'confirmed multiday trip',
+      proposedSlots: [
+        { key: 'origin', value: '北京', confidence: 0.99 },
+        { key: 'waypoint', value: '途经点', confidence: 0.99 },
+        { key: 'destination', value: '杭州', confidence: 0.99 },
+        { key: 'dateRange', value: '2026-05-01 to 2026-05-02', confidence: 1 },
+        { key: 'tripDays', value: '2', confidence: 1 },
+        { key: 'rideWindow', value: '08:00-08:20', confidence: 1 },
+        { key: 'intensity', value: 'standard', confidence: 1 }
+      ]
+    });
+
+    expect(response.status).toBe('routing_ready');
+    expect(response.routePlan).not.toBeNull();
+    expect(response.routePlan?.[0]?.lodging).not.toBeNull();
+    expect(response.routePlan?.[0]?.lodging?.categories.hostel[0]?.providerId).toBe('hostel-ok');
+    expect(response.routePlan?.[0]?.lodging?.categories.guesthouse[0]?.providerId).toBe(
+      'guesthouse-ok'
+    );
+    expect(response.routePlan?.[0]?.lodging?.categories.hotel[0]?.providerId).toBe('hotel-ok');
+    expect(response.routePlan?.[0]?.lodging?.fallbackTrace).toContain('strict_8km');
+  });
+
   it('should keep canonical recap consistent after single-field revision', async () => {
     const storageDir = await mkdtemp(join(tmpdir(), 'roadbook-revision-'));
     const repository = new StorageBackedConstraintDraftRepository(

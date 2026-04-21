@@ -61,6 +61,39 @@ export interface IntakeTurnResponse {
     }>;
     totalDistanceMeters: number;
     totalDurationSeconds: number;
+    lodging: {
+      policyStatus: 'compliant' | 'relaxed' | 'no_match';
+      fallbackTrace: string[];
+      categories: {
+        hostel: Array<{
+          providerId: string;
+          name: string;
+          type: 'hostel' | 'guesthouse' | 'hotel';
+          distanceMeters: number;
+          rating: number | null;
+          priceCny: number | null;
+          policyStage: 'strict' | 'radius_12km' | 'radius_20km' | 'price_relaxed_20';
+        }>;
+        guesthouse: Array<{
+          providerId: string;
+          name: string;
+          type: 'hostel' | 'guesthouse' | 'hotel';
+          distanceMeters: number;
+          rating: number | null;
+          priceCny: number | null;
+          policyStage: 'strict' | 'radius_12km' | 'radius_20km' | 'price_relaxed_20';
+        }>;
+        hotel: Array<{
+          providerId: string;
+          name: string;
+          type: 'hostel' | 'guesthouse' | 'hotel';
+          distanceMeters: number;
+          rating: number | null;
+          priceCny: number | null;
+          policyStage: 'strict' | 'radius_12km' | 'radius_20km' | 'price_relaxed_20';
+        }>;
+      };
+    } | null;
   }> | null;
   routingStatus: 'idle' | 'ready' | 'needs_clarification' | 'fallback';
   fallbackMessage: string | null;

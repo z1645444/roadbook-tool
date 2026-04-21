@@ -220,7 +220,7 @@ export class LodgingPolicyService {
       input.anchor.providerId,
       category,
       stage.radiusMeters,
-      stage.policyStage
+      stage.label
     ].join(':');
     const now = Date.now();
     const cached = this.cache.get(cacheKey);
@@ -253,4 +253,3 @@ export class LodgingPolicyService {
     return candidates;
   }
 }
-

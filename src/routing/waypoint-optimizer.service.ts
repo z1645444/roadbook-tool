@@ -1,4 +1,5 @@
 import type { GeocodeCandidate, MapProvider } from '../map-provider/map-provider.port';
+import { safeParseMultidayRouteArtifact } from '../shared/validation/multiday-route-artifact.schema';
 
 export interface WaypointOptimizationResult {
   optimizedPoints: GeocodeCandidate[];
@@ -9,6 +10,8 @@ interface CandidateScore {
   durationSeconds: number;
   sortKey: string;
 }
+
+const MAX_INTERMEDIATE_PERMUTATION_POINTS = 8;
 
 const permutations = (points: GeocodeCandidate[]): GeocodeCandidate[][] => {
   if (points.length <= 1) {
@@ -52,6 +55,28 @@ const scoreCandidate = async (
   };
 };
 
+const validateOptimizationPayload = (
+  optimizedPoints: GeocodeCandidate[]
+): WaypointOptimizationResult => {
+  const payload = {
+    optimizedPoints,
+    days: [],
+    totals: {
+      totalDistanceMeters: 0,
+      totalDurationSeconds: 0
+    }
+  };
+  const parsed = safeParseMultidayRouteArtifact(payload);
+  if (!parsed.success) {
+    const issues = parsed.error.issues
+      .map((issue) => `${issue.path.join('.')}: ${issue.message}`)
+      .join(', ');
+    throw new Error(`Invalid multiday optimization artifact: ${issues}`);
+  }
+
+  return { optimizedPoints };
+};
+
 export const optimizeWaypointSequence = async (
   points: GeocodeCandidate[],
   provider: Pick<MapProvider, 'routeBicyclingSegment'>
@@ -67,7 +92,14 @@ export const optimizeWaypointSequence = async (
   const intermediates = points.slice(1, -1);
 
   if (intermediates.length < 2) {
-    return { optimizedPoints: points };
+    return validateOptimizationPayload(points);
+  }
+
+  if (intermediates.length > MAX_INTERMEDIATE_PERMUTATION_POINTS) {
+    const deterministicFallback = intermediates
+      .slice()
+      .sort((left, right) => left.providerId.localeCompare(right.providerId));
+    return validateOptimizationPayload([origin, ...deterministicFallback, destination]);
   }
 
   let best: { points: GeocodeCandidate[]; score: CandidateScore } | null = null;
@@ -94,7 +126,5 @@ export const optimizeWaypointSequence = async (
     }
   }
 
-  return {
-    optimizedPoints: best?.points ?? points
-  };
+  return validateOptimizationPayload(best?.points ?? points);
 };

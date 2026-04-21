@@ -8,13 +8,19 @@ import {
 } from './slot-resolver.service';
 import type { IntakeTurnDto } from '../shared/validation/intake-turn.dto';
 import { createConstraintDraft, type ConstraintDraft } from '../constraints/constraint-draft.model';
+import type { ConstraintDraftRepository } from '../constraints/constraint-draft.repository';
+import type { RoutingOrchestratorService } from '../routing/routing-orchestrator.service';
 
 export interface IntakeTurnResponse {
-  status: SlotResolutionState['status'];
+  status: SlotResolutionState['status'] | 'routing_ready' | 'routing_fallback';
   missingSlots: string[];
   clarificationPrompt: string | null;
   recap: { summary: string; assumptions: string[] } | null;
   confirmationRequired: boolean;
+  routePlan: unknown;
+  routingStatus: 'idle' | 'ready' | 'needs_clarification' | 'fallback';
+  fallbackMessage: string | null;
+  routeMetadata: unknown;
 }
 
 @Controller('conversation/intake')
@@ -25,8 +31,13 @@ export class IntakeController {
   private readonly slotResolver = resolveNextSlotAction;
   private readonly extractor = new ParserFirstConstraintExtractor();
 
+  constructor(
+    private readonly routingOrchestrator?: RoutingOrchestratorService,
+    private readonly draftRepository?: ConstraintDraftRepository
+  ) {}
+
   @Post(IntakeController.TURN_ENDPOINT.replace('intake/', ''))
-  processTurn(@Body() payload: IntakeTurnDto): IntakeTurnResponse {
+  async processTurn(@Body() payload: IntakeTurnDto): Promise<IntakeTurnResponse> {
     const draft = this.createDraftFromTurn(payload);
 
     const extracted = this.extractor.extractConstraints(payload);
@@ -63,7 +74,58 @@ export class IntakeController {
         : { needsClarification: false }
     );
 
-    return this.toResponse(resolution);
+    if (resolution.status !== 'ready_for_confirmation') {
+      return this.toResponse(resolution);
+    }
+
+    if (!this.routingOrchestrator || !this.draftRepository) {
+      return this.toResponse(resolution);
+    }
+
+    await this.draftRepository.createDraft(payload.sessionId, draft);
+    const routingResult = await this.routingOrchestrator.planRouteForSession(payload.sessionId);
+
+    if (routingResult.routingStatus === 'fallback') {
+      return {
+        status: 'routing_fallback',
+        missingSlots: [],
+        clarificationPrompt: null,
+        recap: resolution.recap,
+        confirmationRequired: false,
+        routePlan: null,
+        routingStatus: routingResult.routingStatus,
+        fallbackMessage: routingResult.fallbackMessage,
+        routeMetadata: routingResult.routeMetadata
+      };
+    }
+
+    if (routingResult.routingStatus === 'needs_clarification') {
+      return {
+        status: 'need_clarification',
+        missingSlots: [routingResult.clarification.needed ? routingResult.clarification.slot : 'point'],
+        clarificationPrompt: routingResult.clarification.needed
+          ? routingResult.clarification.prompt
+          : 'Please clarify this point.',
+        recap: null,
+        confirmationRequired: true,
+        routePlan: null,
+        routingStatus: routingResult.routingStatus,
+        fallbackMessage: null,
+        routeMetadata: null
+      };
+    }
+
+    return {
+      status: 'routing_ready',
+      missingSlots: [],
+      clarificationPrompt: null,
+      recap: resolution.recap,
+      confirmationRequired: false,
+      routePlan: routingResult.routePlan,
+      routingStatus: routingResult.routingStatus,
+      fallbackMessage: null,
+      routeMetadata: routingResult.routeMetadata
+    };
   }
 
   private toResponse(state: SlotResolutionState): IntakeTurnResponse {
@@ -73,7 +135,11 @@ export class IntakeController {
         missingSlots: [state.slot],
         clarificationPrompt: null,
         recap: null,
-        confirmationRequired: true
+        confirmationRequired: true,
+        routePlan: null,
+        routingStatus: 'idle',
+        fallbackMessage: null,
+        routeMetadata: null
       };
     }
 
@@ -83,7 +149,11 @@ export class IntakeController {
         missingSlots: [state.slot],
         clarificationPrompt: state.prompt,
         recap: null,
-        confirmationRequired: true
+        confirmationRequired: true,
+        routePlan: null,
+        routingStatus: 'idle',
+        fallbackMessage: null,
+        routeMetadata: null
       };
     }
 
@@ -92,7 +162,11 @@ export class IntakeController {
       missingSlots: [],
       clarificationPrompt: null,
       recap: state.recap,
-      confirmationRequired: true
+      confirmationRequired: true,
+      routePlan: null,
+      routingStatus: 'idle',
+      fallbackMessage: null,
+      routeMetadata: null
     };
   }
 

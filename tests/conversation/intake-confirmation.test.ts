@@ -10,6 +10,8 @@ import { applyConstraintPatch } from '../../src/constraints/constraint-patch.ser
 import { createConstraintDraft } from '../../src/constraints/constraint-draft.model';
 import { StorageBackedConstraintDraftRepository } from '../../src/constraints/constraint-draft.repository';
 import { buildConstraintRecap } from '../../src/recap/recap-projection.service';
+import type { MapProvider } from '../../src/map-provider/map-provider.port';
+import { RoutingOrchestratorService } from '../../src/routing/routing-orchestrator.service';
 
 describe('CONV-01 intake confirmation resolver', () => {
   it('should ask for origin when required slot is missing', () => {
@@ -107,10 +109,10 @@ describe('CONV-01 intake confirmation resolver', () => {
 });
 
 describe('intake/turn controller confirmation gate', () => {
-  it('should return confirmationRequired and cannot proceed without confirmation', () => {
+  it('should return confirmationRequired and keep routing idle when orchestrator is not wired', async () => {
     const controller = new IntakeController();
 
-    const response = controller.processTurn({
+    const response = await controller.processTurn({
       sessionId: 'session-1',
       turnId: 'turn-1',
       message: 'trip setup',
@@ -127,12 +129,13 @@ describe('intake/turn controller confirmation gate', () => {
 
     expect(response.confirmationRequired).toBe(true);
     expect(response.status).toBe('ready_for_confirmation');
+    expect(response.routingStatus).toBe('idle');
   });
 
-  it('should return clarificationPrompt when point ambiguity is present', () => {
+  it('should return clarificationPrompt when point ambiguity is present', async () => {
     const controller = new IntakeController();
 
-    const response = controller.processTurn({
+    const response = await controller.processTurn({
       sessionId: 'session-2',
       turnId: 'turn-2',
       message: 'ambiguous waypoint',
@@ -144,6 +147,64 @@ describe('intake/turn controller confirmation gate', () => {
     expect(response.status).toBe('need_clarification');
     expect(response.clarificationPrompt).toMatch(/clarify/i);
     expect(response.confirmationRequired).toBe(true);
+  });
+
+  it('should trigger routing orchestrator after confirmation-ready state', async () => {
+    const storageDir = await mkdtemp(join(tmpdir(), 'roadbook-controller-routing-'));
+    const repository = new StorageBackedConstraintDraftRepository(
+      join(storageDir, 'storage/constraint-drafts.json')
+    );
+
+    const provider: MapProvider = {
+      async geocodePoint(input) {
+        return {
+          candidates: [
+            {
+              provider: 'amap',
+              providerId: `${input.query}-id`,
+              name: input.query,
+              lng: input.query === '北京' ? 116.4 : 120.2,
+              lat: input.query === '北京' ? 39.9 : 30.25,
+              confidence: 0.99
+            }
+          ]
+        };
+      },
+      async routeBicyclingSegment() {
+        return {
+          distanceMeters: 2000,
+          durationSeconds: 480,
+          polyline: [
+            { lng: 116.4, lat: 39.9 },
+            { lng: 120.2, lat: 30.25 }
+          ]
+        };
+      }
+    };
+
+    const orchestrator = new RoutingOrchestratorService(provider, repository);
+    const controller = new IntakeController(orchestrator, repository);
+
+    const response = await controller.processTurn({
+      sessionId: 'session-3',
+      turnId: 'turn-3',
+      message: 'confirmed trip',
+      proposedSlots: [
+        { key: 'origin', value: '北京', confidence: 0.99 },
+        { key: 'destination', value: '杭州', confidence: 0.99 },
+        { key: 'dateRange', value: '2026-05-01 to 2026-05-01', confidence: 1 },
+        { key: 'tripDays', value: '1', confidence: 1 },
+        { key: 'rideWindow', value: '08:00-17:00', confidence: 1 },
+        { key: 'intensity', value: 'standard', confidence: 1 }
+      ]
+    });
+
+    expect(response.confirmationRequired).toBe(false);
+    expect(response.status).toBe('routing_ready');
+    expect(response.routingStatus).toBe('ready');
+    expect(response.routePlan).not.toBeNull();
+    expect(response.fallbackMessage).toBeNull();
+    expect(response.routeMetadata).not.toBeNull();
   });
 
   it('should keep canonical recap consistent after single-field revision', async () => {

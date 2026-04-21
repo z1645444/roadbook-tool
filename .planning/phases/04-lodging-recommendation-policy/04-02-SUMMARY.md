@@ -64,7 +64,20 @@ completed: 2026-04-21
 
 ## Deviations from Plan
 
-None - plan executed as written.
+### Auto-fixed Issues
+
+**1. Cache stage token used policy stage instead of fallback stage label**
+- **Found during:** Phase-level review before verification
+- **Issue:** Cache key strict stage segment used `strict` instead of explicit fallback label sequence token.
+- **Fix:** Cache key stage segment changed to `stage.label`.
+- **Files modified:** `src/routing/lodging-policy.service.ts`
+- **Verification:** `pnpm vitest run tests/routing/lodging-policy.service.test.ts tests/routing/lodging-integration.test.ts tests/conversation/intake-confirmation.test.ts tests/routing/single-day-guard.test.ts --reporter=dot`
+- **Committed in:** `f434e09`
+
+---
+
+**Total deviations:** 1 auto-fixed
+**Impact on plan:** No scope change; improves cache traceability consistency with fallback-stage semantics.
 
 ## Issues Encountered
 

@@ -16,7 +16,11 @@ Given rider constraints and trip intent, the tool reliably produces an actionabl
 - [x] Users can define both trip duration and daily riding time windows.
 - [x] Users can select riding intensity using distance + duration constraints.
 - [x] System keeps a canonical machine-readable itinerary model and renders recap from it.
+- [x] System can geocode accepted points, block ambiguous candidates, and generate ordered
+  bicycling segments in single-day mode with deterministic fallback handling.
+- [x] System records route generation metadata (provider/time/hash) for reproducibility diagnostics.
 - Validated in Phase 1: conversation-intake-and-constraint-model
+- Validated in Phase 2: routing-baseline-and-reliability
 
 ### Active
 
@@ -71,6 +75,7 @@ Given rider constraints and trip intent, the tool reliably produces an actionabl
 | Model riding intensity with distance + duration | Better reflects physical load than one metric | Implemented in Phase 1 intake model |
 | Use AMap for v1 and defer custom map integration | Lower implementation risk while preserving future extensibility | — Pending |
 | Output roadbook as Markdown | Immediate usability and low integration overhead | Canonical recap projection implemented in Phase 1 |
+| Route generation fallback policy uses deterministic category mapping | Prevent raw provider failures from leaking into chat UX | Implemented in Phase 2 |
 
 ## Evolution
 
@@ -90,4 +95,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-21 after Phase 1 completion*
+*Last updated: 2026-04-21 after Phase 2 completion*

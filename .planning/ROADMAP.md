@@ -61,7 +61,13 @@ mode.
      silent failure.
   5. Operator can inspect route generation metadata (time/provider hash) tied to generated plans
      for reproducibility checks.
-**Plans**: TBD
+**Plans**: 4 plans
+
+Plans:
+- [x] 02-01-PLAN.md - Define provider contracts, geocode ambiguity handling, and ordered segment aggregation baselines.
+- [x] 02-02-PLAN.md - Implement AMap adapters and centralized infocode fallback mapping for reliability.
+- [x] 02-03-PLAN.md - Build single-day routing orchestrator with reproducibility metadata hashing and persistence.
+- [x] 02-04-PLAN.md - Wire intake-to-routing integration and full Phase 2 requirement regression coverage.
 
 ### Phase 3: Multi-day Optimization and Stage Split
 **Goal**: Users can obtain a feasible multi-day itinerary with optimized waypoint order and day

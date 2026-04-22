@@ -3,6 +3,8 @@ export interface GeocodePointInput {
   city?: string;
 }
 
+export const MAP_PROVIDER = Symbol('MAP_PROVIDER');
+
 export interface GeocodeCandidate {
   provider: 'amap';
   providerId: string;

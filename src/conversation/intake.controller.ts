@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Inject, Optional, Post } from '@nestjs/common';
 
 import { ParserFirstConstraintExtractor } from './constraint-extractor.interface';
 import {
@@ -12,8 +12,14 @@ import {
   type ConstraintDraft,
   type IntensityProfile
 } from '../constraints/constraint-draft.model';
-import type { ConstraintDraftRepository } from '../constraints/constraint-draft.repository';
-import type { RoutingOrchestratorService } from '../routing/routing-orchestrator.service';
+import {
+  CONSTRAINT_DRAFT_REPOSITORY,
+  type ConstraintDraftRepository
+} from '../constraints/constraint-draft.repository';
+import {
+  ROUTING_ORCHESTRATOR,
+  type RoutingOrchestratorService
+} from '../routing/routing-orchestrator.service';
 import { renderMarkdownRoadbook } from '../roadbook/markdown-roadbook.renderer';
 import { parseRideWindow } from '../shared/time/time-window.parser';
 
@@ -118,7 +124,11 @@ export class IntakeController {
   private readonly extractor = new ParserFirstConstraintExtractor();
 
   constructor(
+    @Optional()
+    @Inject(ROUTING_ORCHESTRATOR)
     private readonly routingOrchestrator?: RoutingOrchestratorService,
+    @Optional()
+    @Inject(CONSTRAINT_DRAFT_REPOSITORY)
     private readonly draftRepository?: ConstraintDraftRepository
   ) {}
 

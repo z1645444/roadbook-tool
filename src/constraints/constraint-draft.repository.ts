@@ -4,6 +4,8 @@ import { dirname } from 'node:path';
 import type { ConstraintDraft, RevisionEntry } from './constraint-draft.model';
 import { safeParseConstraintDraft } from '../shared/validation/constraint-draft.schema';
 
+export const CONSTRAINT_DRAFT_REPOSITORY = Symbol('CONSTRAINT_DRAFT_REPOSITORY');
+
 interface ConstraintDraftStorage {
   sessions: Record<string, ConstraintDraft>;
 }

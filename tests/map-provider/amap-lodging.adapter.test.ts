@@ -9,7 +9,8 @@ describe('AmapLodgingAdapter', () => {
   });
 
   it('should call AMap with deterministic query envelope and map payload fields', async () => {
-    const fetchMock = vi.fn(async () => ({
+    const fetchMock = vi.fn(
+      async (_input: RequestInfo | URL, _init?: RequestInit) => ({
       ok: true,
       json: async () => ({
         status: '1',
@@ -27,7 +28,8 @@ describe('AmapLodgingAdapter', () => {
           }
         ]
       })
-    }));
+    })
+    );
     vi.stubGlobal('fetch', fetchMock);
 
     const adapter = new AmapLodgingAdapter('test-key');
@@ -41,7 +43,9 @@ describe('AmapLodgingAdapter', () => {
     });
 
     expect(fetchMock).toHaveBeenCalledTimes(1);
-    const requestUrl = String(fetchMock.mock.calls[0]?.[0]);
+    const firstCall = fetchMock.mock.calls.at(0);
+    expect(firstCall).toBeDefined();
+    const requestUrl = String(firstCall?.[0]);
     expect(requestUrl).toContain('https://restapi.amap.com/v3/place/around?');
     expect(requestUrl).toContain('key=test-key');
     expect(requestUrl).toContain('location=120.1%2C30.2');
@@ -64,7 +68,7 @@ describe('AmapLodgingAdapter', () => {
   });
 
   it('should map timeout/network failures to RoutingFallbackError for lodging endpoint', async () => {
-    const fetchMock = vi.fn(async () => {
+    const fetchMock = vi.fn(async (_input: RequestInfo | URL, _init?: RequestInit) => {
       throw new Error('network timeout');
     });
     vi.stubGlobal('fetch', fetchMock);
@@ -79,20 +83,24 @@ describe('AmapLodgingAdapter', () => {
       category: 'hostel'
     });
 
-    const error = await promise.catch((caught) => caught as RoutingFallbackError);
+    const error = await promise.catch((caught) => caught);
     expect(error).toBeInstanceOf(RoutingFallbackError);
-    expect(error.userMessage).toContain('（lodging）');
+    if (error instanceof RoutingFallbackError) {
+      expect(error.userMessage).toContain('（lodging）');
+    }
   });
 
   it('should clamp radius and page before request and map non-success payload to fallback', async () => {
-    const fetchMock = vi.fn(async () => ({
+    const fetchMock = vi.fn(
+      async (_input: RequestInfo | URL, _init?: RequestInit) => ({
       ok: true,
       json: async () => ({
         status: '0',
         info: 'INVALID_USER_KEY',
         infocode: '10001'
       })
-    }));
+    })
+    );
     vi.stubGlobal('fetch', fetchMock);
 
     const adapter = new AmapLodgingAdapter('test-key');
@@ -106,7 +114,9 @@ describe('AmapLodgingAdapter', () => {
     });
 
     await expect(promise).rejects.toBeInstanceOf(RoutingFallbackError);
-    const requestUrl = String(fetchMock.mock.calls[0]?.[0]);
+    const firstCall = fetchMock.mock.calls.at(0);
+    expect(firstCall).toBeDefined();
+    const requestUrl = String(firstCall?.[0]);
     expect(requestUrl).toContain('radius=8000');
     expect(requestUrl).toContain('page=1');
     expect(requestUrl).toContain('types=100105');

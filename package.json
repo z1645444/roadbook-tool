@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "build": "tsc -p tsconfig.json",
+    "start": "node --env-file=.env --import tsx src/main.ts",
     "test": "vitest run",
     "test:conversation": "vitest run tests/conversation",
     "test:phase1": "vitest run tests/conversation tests/constraints tests/recap"
@@ -23,6 +24,7 @@
   "devDependencies": {
     "@types/luxon": "^3.7.1",
     "@types/node": "24.9.0",
+    "tsx": "4.20.6",
     "typescript": "6.0.3",
     "vitest": "4.1.4"
   }

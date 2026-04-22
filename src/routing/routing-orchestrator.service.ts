@@ -1,5 +1,10 @@
-import type { ConstraintDraftRepository } from '../constraints/constraint-draft.repository';
-import type { MapProvider } from '../map-provider/map-provider.port';
+import { Inject, Injectable } from '@nestjs/common';
+
+import {
+  CONSTRAINT_DRAFT_REPOSITORY,
+  type ConstraintDraftRepository
+} from '../constraints/constraint-draft.repository';
+import { MAP_PROVIDER, type MapProvider } from '../map-provider/map-provider.port';
 import { buildOrderedSegments } from './segment-routing.service';
 import { buildRouteGenerationMetadata } from '../reliability/repro-metadata.service';
 import { RoutingFallbackError } from '../reliability/routing-fallback.error';
@@ -42,12 +47,19 @@ export interface RoutingOrchestratorResult {
   clarification: ClarificationPayload | RoutingReadyPayload;
 }
 
+export const ROUTING_ORCHESTRATOR = Symbol('ROUTING_ORCHESTRATOR');
+
+@Injectable()
 export class RoutingOrchestratorService {
+  private readonly lodgingPolicyService: LodgingPolicyService;
+
   constructor(
-    private readonly provider: MapProvider,
-    private readonly repository: ConstraintDraftRepository,
-    private readonly lodgingPolicyService: LodgingPolicyService = new LodgingPolicyService(provider)
-  ) {}
+    @Inject(MAP_PROVIDER) private readonly provider: MapProvider,
+    @Inject(CONSTRAINT_DRAFT_REPOSITORY)
+    private readonly repository: ConstraintDraftRepository
+  ) {
+    this.lodgingPolicyService = new LodgingPolicyService(provider);
+  }
 
   async planRouteForSession(sessionId: string): Promise<RoutingOrchestratorResult> {
     const draft = await this.repository.getBySessionId(sessionId);

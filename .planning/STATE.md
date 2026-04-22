@@ -68,7 +68,7 @@ Recent decisions affecting current work:
 
 ### Pending Todos
 
-None yet.
+- [ ] 2026-04-22 - Split roadbook tool into reusable skill (.planning/todos/pending/2026-04-22-split-roadbook-tool-into-reusable-skill.md)
 
 ### Blockers/Concerns
 

@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "roadbook-skill.invoke-input",
+  "title": "roadbook.plan input",
+  "type": "object",
+  "required": [
+    "sessionId",
+    "canonicalDraft",
+    "recap"
+  ],
+  "properties": {
+    "sessionId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "canonicalDraft": {
+      "type": "object",
+      "description": "Canonical constraint draft payload."
+    },
+    "recap": {
+      "type": "object",
+      "required": [
+        "summary",
+        "assumptions"
+      ],
+      "properties": {
+        "summary": {
+          "type": "string"
+        },
+        "assumptions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}
+

@@ -27,4 +27,14 @@
 | Milestone | Phase Range | Plans Complete | Status | Completed |
 |-----------|-------------|----------------|--------|-----------|
 | v1.0 milestone | 1-5 | 16/16 | Complete | 2026-04-22 |
-| v1.1 planning | - | 0/0 | Not started | - |
+| v1.1 planning | 6 | 1/1 | Complete | 2026-04-22 |
+
+### Phase 6: Split roadbook tool into reusable skill
+
+**Goal:** Separate reusable planning skill contract from app runtime while preserving v1 behavior.
+**Requirements**: TBD
+**Depends on:** Phase 5
+**Plans:** 1 plan
+
+Plans:
+- [x] 06-01: Extract core planning engine and publish skill-facing contract

@@ -20,7 +20,7 @@ import {
   ROUTING_ORCHESTRATOR,
   type RoutingOrchestratorService
 } from '../routing/routing-orchestrator.service';
-import { renderMarkdownRoadbook } from '../roadbook/markdown-roadbook.renderer';
+import { RoadbookSkillService } from '../skill/roadbook-skill.service';
 import { parseRideWindow } from '../shared/time/time-window.parser';
 
 export interface IntakeTurnResponse {
@@ -129,8 +129,17 @@ export class IntakeController {
     private readonly routingOrchestrator?: RoutingOrchestratorService,
     @Optional()
     @Inject(CONSTRAINT_DRAFT_REPOSITORY)
-    private readonly draftRepository?: ConstraintDraftRepository
-  ) {}
+    private readonly draftRepository?: ConstraintDraftRepository,
+    @Optional()
+    private readonly roadbookSkillService?: RoadbookSkillService
+  ) {
+    if (!this.roadbookSkillService && this.routingOrchestrator && this.draftRepository) {
+      this.roadbookSkillService = new RoadbookSkillService(
+        this.routingOrchestrator,
+        this.draftRepository
+      );
+    }
+  }
 
   @Post(IntakeController.TURN_ENDPOINT.replace('intake/', ''))
   async processTurn(@Body() payload: IntakeTurnDto): Promise<IntakeTurnResponse> {
@@ -174,14 +183,17 @@ export class IntakeController {
       return this.toResponse(resolution);
     }
 
-    if (!this.routingOrchestrator || !this.draftRepository) {
+    if (!this.roadbookSkillService) {
       return this.toResponse(resolution);
     }
 
-    await this.draftRepository.createDraft(payload.sessionId, draft);
-    const routingResult = await this.routingOrchestrator.planRouteForSession(payload.sessionId);
+    const skillResult = await this.roadbookSkillService.execute({
+      sessionId: payload.sessionId,
+      canonicalDraft: draft,
+      recap: resolution.recap
+    });
 
-    if (routingResult.routingStatus === 'fallback') {
+    if (skillResult.status === 'fallback') {
       return {
         status: 'routing_fallback',
         missingSlots: [],
@@ -189,39 +201,27 @@ export class IntakeController {
         recap: resolution.recap,
         confirmationRequired: false,
         routePlan: null,
-        routingStatus: routingResult.routingStatus,
-        fallbackMessage: routingResult.fallbackMessage,
-        routeMetadata: routingResult.routeMetadata,
+        routingStatus: 'fallback',
+        fallbackMessage: skillResult.fallbackMessage,
+        routeMetadata: skillResult.routeMetadata,
         roadbookMarkdown: null
       };
     }
 
-    if (routingResult.routingStatus === 'needs_clarification') {
+    if (skillResult.status === 'needs_clarification') {
       return {
         status: 'need_clarification',
-        missingSlots: [routingResult.clarification.needed ? routingResult.clarification.slot : 'point'],
-        clarificationPrompt: routingResult.clarification.needed
-          ? routingResult.clarification.prompt
-          : 'Please clarify this point.',
+        missingSlots: [skillResult.clarification.slot],
+        clarificationPrompt: skillResult.clarification.prompt,
         recap: null,
         confirmationRequired: true,
         routePlan: null,
-        routingStatus: routingResult.routingStatus,
+        routingStatus: 'needs_clarification',
         fallbackMessage: null,
         routeMetadata: null,
         roadbookMarkdown: null
       };
     }
-
-    const routePlan = routingResult.routePlan ?? [];
-    const roadbookMarkdown = renderMarkdownRoadbook({
-      recap: resolution.recap,
-      routePlan,
-      routeMetadata: routingResult.routeMetadata,
-      options: {
-        includeValidationContext: true
-      }
-    });
 
     return {
       status: 'routing_ready',
@@ -229,11 +229,11 @@ export class IntakeController {
       clarificationPrompt: null,
       recap: resolution.recap,
       confirmationRequired: false,
-      routePlan,
-      routingStatus: routingResult.routingStatus,
+      routePlan: skillResult.routePlan,
+      routingStatus: 'ready',
       fallbackMessage: null,
-      routeMetadata: routingResult.routeMetadata,
-      roadbookMarkdown
+      routeMetadata: skillResult.routeMetadata,
+      roadbookMarkdown: skillResult.roadbookMarkdown
     };
   }
 

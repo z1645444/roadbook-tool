@@ -11,6 +11,7 @@ import {
   ROUTING_ORCHESTRATOR,
   RoutingOrchestratorService
 } from './routing/routing-orchestrator.service';
+import { RoadbookSkillService } from './skill/roadbook-skill.service';
 
 @Module({
   controllers: [IntakeController],
@@ -26,7 +27,8 @@ import {
     {
       provide: CONSTRAINT_DRAFT_REPOSITORY,
       useFactory: () => new StorageBackedConstraintDraftRepository()
-    }
+    },
+    RoadbookSkillService
   ]
 })
 export class AppModule {}

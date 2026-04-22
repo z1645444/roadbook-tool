@@ -4,8 +4,11 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "tsc -p tsconfig.json",
+    "build": "rm -rf dist && tsc -p tsconfig.json",
+    "build:skill": "pnpm build && rm -rf .artifacts/roadbook-skill && mkdir -p .artifacts/roadbook-skill/dist && cp -R dist/src .artifacts/roadbook-skill/dist/src && cp skill/roadbook-skill/manifest.json .artifacts/roadbook-skill/manifest.json && cp -R skill/roadbook-skill/schemas .artifacts/roadbook-skill/schemas && cp -R skill/roadbook-skill/examples .artifacts/roadbook-skill/examples && cp -R skill/roadbook-skill/docs .artifacts/roadbook-skill/docs && cp package.json .artifacts/roadbook-skill/package.json",
     "start": "node --env-file=.env --import tsx src/main.ts",
+    "skill:minimal": "node --env-file=.env --import tsx src/skill/minimal-roadbook-skill.cli.ts",
+    "skill:server": "node --env-file=.env --import tsx src/skill/roadbook-skill.server.ts",
     "test": "vitest run",
     "test:conversation": "vitest run tests/conversation",
     "test:phase1": "vitest run tests/conversation tests/constraints tests/recap"

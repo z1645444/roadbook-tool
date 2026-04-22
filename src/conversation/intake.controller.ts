@@ -14,6 +14,7 @@ import {
 } from '../constraints/constraint-draft.model';
 import type { ConstraintDraftRepository } from '../constraints/constraint-draft.repository';
 import type { RoutingOrchestratorService } from '../routing/routing-orchestrator.service';
+import { renderMarkdownRoadbook } from '../roadbook/markdown-roadbook.renderer';
 import { parseRideWindow } from '../shared/time/time-window.parser';
 
 export interface IntakeTurnResponse {
@@ -105,6 +106,7 @@ export interface IntakeTurnResponse {
     responseHash: string;
     infocode?: string;
   } | null;
+  roadbookMarkdown: string | null;
 }
 
 @Controller('conversation/intake')
@@ -179,7 +181,8 @@ export class IntakeController {
         routePlan: null,
         routingStatus: routingResult.routingStatus,
         fallbackMessage: routingResult.fallbackMessage,
-        routeMetadata: routingResult.routeMetadata
+        routeMetadata: routingResult.routeMetadata,
+        roadbookMarkdown: null
       };
     }
 
@@ -195,9 +198,20 @@ export class IntakeController {
         routePlan: null,
         routingStatus: routingResult.routingStatus,
         fallbackMessage: null,
-        routeMetadata: null
+        routeMetadata: null,
+        roadbookMarkdown: null
       };
     }
+
+    const routePlan = routingResult.routePlan ?? [];
+    const roadbookMarkdown = renderMarkdownRoadbook({
+      recap: resolution.recap,
+      routePlan,
+      routeMetadata: routingResult.routeMetadata,
+      options: {
+        includeValidationContext: true
+      }
+    });
 
     return {
       status: 'routing_ready',
@@ -205,10 +219,11 @@ export class IntakeController {
       clarificationPrompt: null,
       recap: resolution.recap,
       confirmationRequired: false,
-      routePlan: routingResult.routePlan,
+      routePlan,
       routingStatus: routingResult.routingStatus,
       fallbackMessage: null,
-      routeMetadata: routingResult.routeMetadata
+      routeMetadata: routingResult.routeMetadata,
+      roadbookMarkdown
     };
   }
 
@@ -231,7 +246,8 @@ export class IntakeController {
         routePlan: null,
         routingStatus: 'idle',
         fallbackMessage: null,
-        routeMetadata: null
+        routeMetadata: null,
+        roadbookMarkdown: null
       };
     }
 
@@ -245,7 +261,8 @@ export class IntakeController {
         routePlan: null,
         routingStatus: 'idle',
         fallbackMessage: null,
-        routeMetadata: null
+        routeMetadata: null,
+        roadbookMarkdown: null
       };
     }
 
@@ -258,7 +275,8 @@ export class IntakeController {
       routePlan: null,
       routingStatus: 'idle',
       fallbackMessage: null,
-      routeMetadata: null
+      routeMetadata: null,
+      roadbookMarkdown: null
     };
   }
 

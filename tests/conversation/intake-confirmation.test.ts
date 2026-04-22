@@ -130,6 +130,7 @@ describe('intake/turn controller confirmation gate', () => {
     expect(response.confirmationRequired).toBe(true);
     expect(response.status).toBe('ready_for_confirmation');
     expect(response.routingStatus).toBe('idle');
+    expect(response.roadbookMarkdown).toBeNull();
   });
 
   it('should return clarificationPrompt when point ambiguity is present', async () => {
@@ -147,6 +148,7 @@ describe('intake/turn controller confirmation gate', () => {
     expect(response.status).toBe('need_clarification');
     expect(response.clarificationPrompt).toMatch(/clarify/i);
     expect(response.confirmationRequired).toBe(true);
+    expect(response.roadbookMarkdown).toBeNull();
   });
 
   it('should trigger routing orchestrator after confirmation-ready state', async () => {
@@ -208,9 +210,11 @@ describe('intake/turn controller confirmation gate', () => {
     expect(response.routePlan?.[0]?.overnightStopPoint).toBeNull();
     expect(response.fallbackMessage).toBeNull();
     expect(response.routeMetadata).not.toBeNull();
+    expect(response.roadbookMarkdown).toContain('## Day 1');
+    expect(response.roadbookMarkdown).toContain('Route: 北京 -> 杭州');
   });
 
-  it('should include routePlan lodging categories and fallbackTrace on multiday routing_ready response', async () => {
+  it('BOOK-01 and BOOK-03 should include routePlan lodging categories and fallbackTrace on multiday routing_ready response', async () => {
     const storageDir = await mkdtemp(join(tmpdir(), 'roadbook-controller-lodging-'));
     const repository = new StorageBackedConstraintDraftRepository(
       join(storageDir, 'storage/constraint-drafts.json')
@@ -269,8 +273,8 @@ describe('intake/turn controller confirmation gate', () => {
       turnId: 'turn-3-lodging',
       message: 'confirmed multiday trip',
       proposedSlots: [
-        { key: 'origin', value: '北京', confidence: 0.99 },
         { key: 'waypoint', value: '途经点', confidence: 0.99 },
+        { key: 'origin', value: '北京', confidence: 0.99 },
         { key: 'destination', value: '杭州', confidence: 0.99 },
         { key: 'dateRange', value: '2026-05-01 to 2026-05-02', confidence: 1 },
         { key: 'tripDays', value: '2', confidence: 1 },
@@ -288,6 +292,129 @@ describe('intake/turn controller confirmation gate', () => {
     );
     expect(response.routePlan?.[0]?.lodging?.categories.hotel[0]?.providerId).toBe('hotel-ok');
     expect(response.routePlan?.[0]?.lodging?.fallbackTrace).toContain('strict_8km');
+    expect(response.roadbookMarkdown).toContain('## Day 1');
+    expect(response.roadbookMarkdown).toContain('### 住宿建议');
+    expect(response.roadbookMarkdown).toContain('hostel\\-ok | rating: 4.4 | price: 90 CNY');
+    expect(response.roadbookMarkdown).toContain(
+      'guesthouse\\-ok | rating: 4.4 | price: 180 CNY'
+    );
+    expect(response.roadbookMarkdown).toContain('hotel\\-ok | rating: 4.4 | price: 180 CNY');
+  });
+
+  it('BOOK-03 should not include lodging section for single-day route-ready markdown', async () => {
+    const storageDir = await mkdtemp(join(tmpdir(), 'roadbook-controller-singleday-'));
+    const repository = new StorageBackedConstraintDraftRepository(
+      join(storageDir, 'storage/constraint-drafts.json')
+    );
+
+    const provider: MapProvider = {
+      async geocodePoint(input) {
+        return {
+          candidates: [
+            {
+              provider: 'amap',
+              providerId: `${input.query}-id`,
+              name: input.query,
+              lng: input.query === '北京' ? 116.4 : 120.2,
+              lat: input.query === '北京' ? 39.9 : 30.25,
+              confidence: 0.99
+            }
+          ]
+        };
+      },
+      async routeBicyclingSegment(input) {
+        return {
+          distanceMeters: 4000,
+          durationSeconds: 1200,
+          polyline: [input.from, input.to]
+        };
+      },
+      async searchLodgingAround() {
+        return { candidates: [] };
+      }
+    };
+
+    const orchestrator = new RoutingOrchestratorService(provider, repository);
+    const controller = new IntakeController(orchestrator, repository);
+
+    const response = await controller.processTurn({
+      sessionId: 'session-3-singleday',
+      turnId: 'turn-3-singleday',
+      message: 'single day trip',
+      proposedSlots: [
+        { key: 'origin', value: '北京', confidence: 0.99 },
+        { key: 'destination', value: '杭州', confidence: 0.99 },
+        { key: 'dateRange', value: '2026-05-01 to 2026-05-01', confidence: 1 },
+        { key: 'tripDays', value: '1', confidence: 1 },
+        { key: 'rideWindow', value: '08:00-17:00', confidence: 1 },
+        { key: 'intensity', value: 'standard', confidence: 1 }
+      ]
+    });
+
+    expect(response.status).toBe('routing_ready');
+    expect(response.roadbookMarkdown).toContain('## Day 1');
+    expect(response.roadbookMarkdown).not.toContain('### 住宿建议');
+  });
+
+  it('BOOK-04 should include constraints assumptions and validation context in roadbook markdown', async () => {
+    const storageDir = await mkdtemp(join(tmpdir(), 'roadbook-controller-book04-'));
+    const repository = new StorageBackedConstraintDraftRepository(
+      join(storageDir, 'storage/constraint-drafts.json')
+    );
+
+    const provider: MapProvider = {
+      async geocodePoint(input) {
+        return {
+          candidates: [
+            {
+              provider: 'amap',
+              providerId: `${input.query}-id`,
+              name: input.query,
+              lng: input.query === '北京' ? 116.4 : 120.2,
+              lat: input.query === '北京' ? 39.9 : 30.25,
+              confidence: 0.99
+            }
+          ]
+        };
+      },
+      async routeBicyclingSegment(input) {
+        return {
+          distanceMeters: 3000,
+          durationSeconds: 900,
+          polyline: [input.from, input.to]
+        };
+      },
+      async searchLodgingAround() {
+        return { candidates: [] };
+      }
+    };
+
+    const orchestrator = new RoutingOrchestratorService(provider, repository);
+    const controller = new IntakeController(orchestrator, repository);
+
+    const response = await controller.processTurn({
+      sessionId: 'session-3-book04',
+      turnId: 'turn-3-book04',
+      message: 'route with assumption',
+      proposedSlots: [
+        { key: 'waypoint', value: '人民广场', confidence: 0.9, providerId: 'rmgc' },
+        { key: 'origin', value: '北京', confidence: 0.99 },
+        { key: 'destination', value: '杭州', confidence: 0.99 },
+        { key: 'dateRange', value: '2026-05-01 to 2026-05-01', confidence: 1 },
+        { key: 'tripDays', value: '1', confidence: 1 },
+        { key: 'rideWindow', value: '08:00-17:00', confidence: 1 },
+        { key: 'intensity', value: 'standard', confidence: 1 }
+      ]
+    });
+
+    expect(response.status).toBe('routing_ready');
+    expect(response.roadbookMarkdown).toContain('## 约束摘要');
+    expect(response.roadbookMarkdown).toContain('## 假设与修正');
+    expect(response.roadbookMarkdown).toContain('waypoint assumption');
+    expect(response.roadbookMarkdown).toContain('修正路径');
+    expect(response.roadbookMarkdown).toContain('## 校验上下文');
+    expect(response.roadbookMarkdown).toContain('requestFingerprint');
+    expect(response.roadbookMarkdown).toContain('responseHash');
   });
 
   it('should keep canonical recap consistent after single-field revision', async () => {

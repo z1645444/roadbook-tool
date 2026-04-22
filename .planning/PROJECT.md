@@ -21,6 +21,8 @@ Given rider constraints and trip intent, the tool reliably produces an actionabl
 - [x] System records route generation metadata (provider/time/hash) for reproducibility diagnostics.
 - [x] System can recommend nearby hostels, guesthouses, and hotels by score and price policy rules
   with deterministic fallback traces.
+- [x] System can generate a Markdown roadbook for single-day and multi-day trips, including
+  assumptions and validation context.
 - Validated in Phase 1: conversation-intake-and-constraint-model
 - Validated in Phase 2: routing-baseline-and-reliability
 - Validated in Phase 3: multi-day-optimization-and-stage-split
@@ -29,7 +31,6 @@ Given rider constraints and trip intent, the tool reliably produces an actionabl
 ### Active
 
 - [x] System can reorder waypoints to optimize route feasibility
-- [ ] System can generate a Markdown roadbook for single-day and multi-day trips
 
 ### Out of Scope
 
@@ -77,13 +78,13 @@ Given rider constraints and trip intent, the tool reliably produces an actionabl
 | Support single-day and multi-day in v1 | Real cyclist trips require both use cases | — Pending |
 | Model riding intensity with distance + duration | Better reflects physical load than one metric | Implemented in Phase 1 intake model |
 | Use AMap for v1 and defer custom map integration | Lower implementation risk while preserving future extensibility | — Pending |
-| Output roadbook as Markdown | Immediate usability and low integration overhead | Canonical recap projection implemented in Phase 1 |
+| Output roadbook as Markdown | Immediate usability and low integration overhead | Implemented in Phase 5 with deterministic day-grouped rendering |
 | Route generation fallback policy uses deterministic category mapping | Prevent raw provider failures from leaking into chat UX | Implemented in Phase 2 |
 
 ## Current State
 
-Phase 4 complete — lodging recommendation retrieval/policy/integration is implemented and
-regression-verified.
+Phase 5 complete — markdown roadbook delivery is implemented with deterministic day-grouped
+sections, lodging shortlist rendering, and validation context.
 
 ## Evolution
 
@@ -103,4 +104,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-21 after Phase 4 completion*
+*Last updated: 2026-04-22 after Phase 5 completion*

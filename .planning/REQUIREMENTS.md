@@ -20,11 +20,11 @@
 
 ### Routing and Optimization
 
-- [ ] **ROUT-01**: System can geocode all accepted points with AMap and reject ambiguous points unless user confirms.
-- [ ] **ROUT-02**: System can generate cycling route segments between ordered points using AMap bicycling APIs.
-- [ ] **ROUT-03**: System can reorder waypoints to optimize route feasibility under constraints.
-- [ ] **ROUT-04**: System can split route into day stages for multi-day trips using daily intensity and time-window limits.
-- [ ] **ROUT-05**: System can keep single-day planning behavior when trip is configured as one day.
+- [x] **ROUT-01**: System can geocode all accepted points with AMap and reject ambiguous points unless user confirms.
+- [x] **ROUT-02**: System can generate cycling route segments between ordered points using AMap bicycling APIs.
+- [x] **ROUT-03**: System can reorder waypoints to optimize route feasibility under constraints.
+- [x] **ROUT-04**: System can split route into day stages for multi-day trips using daily intensity and time-window limits.
+- [x] **ROUT-05**: System can keep single-day planning behavior when trip is configured as one day.
 
 ### Lodging Recommendations
 
@@ -36,17 +36,17 @@
 
 ### Roadbook Output
 
-- [ ] **BOOK-01**: System outputs final plan as Markdown roadbook grouped by day.
-- [ ] **BOOK-02**: Each day includes route overview, distance, estimated ride time, and waypoint sequence.
-- [ ] **BOOK-03**: Each day includes lodging shortlist near planned overnight points with score/price details.
-- [ ] **BOOK-04**: Output includes assumptions and constraint summary so users can validate plan correctness.
+- [x] **BOOK-01**: System outputs final plan as Markdown roadbook grouped by day.
+- [x] **BOOK-02**: Each day includes route overview, distance, estimated ride time, and waypoint sequence.
+- [x] **BOOK-03**: Each day includes lodging shortlist near planned overnight points with score/price details.
+- [x] **BOOK-04**: Output includes assumptions and constraint summary so users can validate plan correctness.
 
 ### Reliability and Safety Baseline
 
-- [ ] **RELY-01**: System handles AMap quota/auth/rate errors with clear user-facing fallback message.
+- [x] **RELY-01**: System handles AMap quota/auth/rate errors with clear user-facing fallback message.
 - [x] **RELY-02
 **: System keeps canonical machine-readable itinerary model internally and renders Markdown from it.
-- [ ] **RELY-03**: System records route generation metadata (time/provider hash) for reproducibility diagnostics.
+- [x] **RELY-03**: System records route generation metadata (time/provider hash) for reproducibility diagnostics.
 
 ## v2 Requirements
 
@@ -84,23 +84,23 @@
 | CONV-03 | Phase 1 | Complete |
 | CONV-04 | Phase 1 | Complete |
 | CONV-05 | Phase 1 | Complete |
-| ROUT-01 | Phase 2 | Pending |
-| ROUT-02 | Phase 2 | Pending |
-| ROUT-03 | Phase 3 | Pending |
-| ROUT-04 | Phase 3 | Pending |
-| ROUT-05 | Phase 2 | Pending |
+| ROUT-01 | Phase 2 | Complete |
+| ROUT-02 | Phase 2 | Complete |
+| ROUT-03 | Phase 3 | Complete |
+| ROUT-04 | Phase 3 | Complete |
+| ROUT-05 | Phase 2 | Complete |
 | LODG-01 | Phase 4 | Complete |
 | LODG-02 | Phase 4 | Complete |
 | LODG-03 | Phase 4 | Complete |
 | LODG-04 | Phase 4 | Complete |
 | LODG-05 | Phase 4 | Complete |
-| BOOK-01 | Phase 5 | Pending |
-| BOOK-02 | Phase 5 | Pending |
-| BOOK-03 | Phase 5 | Pending |
-| BOOK-04 | Phase 5 | Pending |
-| RELY-01 | Phase 2 | Pending |
+| BOOK-01 | Phase 5 | Complete |
+| BOOK-02 | Phase 5 | Complete |
+| BOOK-03 | Phase 5 | Complete |
+| BOOK-04 | Phase 5 | Complete |
+| RELY-01 | Phase 2 | Complete |
 | RELY-02 | Phase 1 | Complete |
-| RELY-03 | Phase 2 | Pending |
+| RELY-03 | Phase 2 | Complete |
 
 **Coverage:**
 - v1 requirements: 22 total
@@ -109,4 +109,4 @@
 
 ---
 *Requirements defined: 2026-04-20*
-*Last updated: 2026-04-21 after Phase 4 completion*
+*Last updated: 2026-04-22 after Phase 5 completion*

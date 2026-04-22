@@ -14,13 +14,13 @@ baseline, multi-day optimization, lodging policy, then user-facing roadbook outp
 
 - [x] **Phase 1: Conversation Intake and Constraint Model** - Capture planning inputs in chat and
       persist a canonical itinerary draft.
-- [ ] **Phase 2: Routing Baseline and Reliability** - Produce reliable single-day routing with
+- [x] **Phase 2: Routing Baseline and Reliability** - Produce reliable single-day routing with
       AMap error handling and reproducibility metadata.
-- [ ] **Phase 3: Multi-day Optimization and Stage Split** - Reorder waypoints and split
+- [x] **Phase 3: Multi-day Optimization and Stage Split** - Reorder waypoints and split
       multi-day routes under ride constraints.
-- [ ] **Phase 4: Lodging Recommendation Policy** - Add overnight lodging search with strict
+- [x] **Phase 4: Lodging Recommendation Policy** - Add overnight lodging search with strict
       quality/price rules and fallback behavior.
-- [ ] **Phase 5: Markdown Roadbook Delivery** - Render complete day-grouped roadbook output with
+- [x] **Phase 5: Markdown Roadbook Delivery** - Render complete day-grouped roadbook output with
       assumptions and validation context.
 
 ## Phase Details
@@ -116,7 +116,7 @@ Plans:
   3. User sees lodging shortlists with score/price details on relevant overnight days.
   4. User can review assumptions and applied constraints in the output to validate plan
      correctness.
-**Plans**: TBD
+**Plans**: 3 plans
 
 ## Progress
 
@@ -126,4 +126,4 @@ Plans:
 | 2. Routing Baseline and Reliability | 4/4 | Complete | 2026-04-21 |
 | 3. Multi-day Optimization and Stage Split | 3/3 | Complete | 2026-04-21 |
 | 4. Lodging Recommendation Policy | 3/3 | Complete | 2026-04-21 |
-| 5. Markdown Roadbook Delivery | 0/TBD | Not started | - |
+| 5. Markdown Roadbook Delivery | 3/3 | Complete | 2026-04-22 |

@@ -8,35 +8,44 @@ roadbook-tool is a chat-first route planning skill for cyclists, focused on buil
 
 Given rider constraints and trip intent, the tool reliably produces an actionable cycling roadbook that balances route feasibility and lodging quality.
 
+## Current State
+
+- Milestone `v1.0` shipped on 2026-04-22.
+- End-to-end flow is implemented from intake to Markdown roadbook delivery.
+- v1 requirements are fully covered by shipped phases and passing verification artifacts.
+
 ## Requirements
 
 ### Validated
 
-- [x] Users can provide start, end, and optional waypoints in a chat flow.
-- [x] Users can define both trip duration and daily riding time windows.
-- [x] Users can select riding intensity using distance + duration constraints.
-- [x] System keeps a canonical machine-readable itinerary model and renders recap from it.
-- [x] System can geocode accepted points, block ambiguous candidates, and generate ordered
-  bicycling segments in single-day mode with deterministic fallback handling.
-- [x] System records route generation metadata (provider/time/hash) for reproducibility diagnostics.
-- [x] System can recommend nearby hostels, guesthouses, and hotels by score and price policy rules
-  with deterministic fallback traces.
-- [x] System can generate a Markdown roadbook for single-day and multi-day trips, including
-  assumptions and validation context.
-- Validated in Phase 1: conversation-intake-and-constraint-model
-- Validated in Phase 2: routing-baseline-and-reliability
-- Validated in Phase 3: multi-day-optimization-and-stage-split
-- Validated in Phase 4: lodging-recommendation-policy
+- ✓ Users can provide start, end, and optional waypoints in a chat flow — v1.0.
+- ✓ Users can define both trip duration and daily riding time windows — v1.0.
+- ✓ Users can select riding intensity using distance + duration constraints — v1.0.
+- ✓ System keeps a canonical machine-readable itinerary model and renders recap from it — v1.0.
+- ✓ System can geocode accepted points, block ambiguous candidates, and generate ordered bicycling segments in single-day mode with deterministic fallback handling — v1.0.
+- ✓ System records route generation metadata (provider/time/hash) for reproducibility diagnostics — v1.0.
+- ✓ System can reorder waypoints to optimize route feasibility under constraints — v1.0.
+- ✓ System can recommend nearby hostels, guesthouses, and hotels by score and price policy rules with deterministic fallback traces — v1.0.
+- ✓ System can generate a Markdown roadbook for single-day and multi-day trips, including assumptions and validation context — v1.0.
 
 ### Active
 
-- [x] System can reorder waypoints to optimize route feasibility
+- [ ] Add provider abstraction expansion beyond AMap (v2 preparation).
+- [ ] Add GPX/TCX export for device interoperability.
+- [ ] Add weather/wind-aware replanning constraints.
 
 ### Out of Scope
 
-- Global map-provider parity in v1 — v1 is China-first and AMap-based for delivery speed
-- Full custom map-provider integration in v1 — deferred to v2 to avoid architecture sprawl early
-- Web UI and standalone CLI in v1 — chat skill is the first delivery vehicle
+- Global map-provider parity in v1 — v1 is China-first and AMap-based for delivery speed.
+- Full custom map-provider integration in v1 — deferred to v2 to avoid architecture sprawl early.
+- Web UI and standalone CLI in v1 — chat skill is the first delivery vehicle.
+- In-app booking/payment for lodging — not part of route planning core value validation.
+
+## Next Milestone Goals
+
+- Define `v1.1` scope with concrete requirements and traceability.
+- Prioritize one integration outcome (export or provider boundary) and one planning quality outcome (replanning intelligence).
+- Keep deterministic behavior and verification coverage as non-negotiable release criteria.
 
 ## Context
 
@@ -75,16 +84,11 @@ Given rider constraints and trip intent, the tool reliably produces an actionabl
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
 | Build as a chat skill first | Validate planning logic before UI expansion | Implemented in Phase 1 |
-| Support single-day and multi-day in v1 | Real cyclist trips require both use cases | — Pending |
 | Model riding intensity with distance + duration | Better reflects physical load than one metric | Implemented in Phase 1 intake model |
-| Use AMap for v1 and defer custom map integration | Lower implementation risk while preserving future extensibility | — Pending |
-| Output roadbook as Markdown | Immediate usability and low integration overhead | Implemented in Phase 5 with deterministic day-grouped rendering |
+| Use AMap for v1 and defer custom map integration | Lower implementation risk while preserving future extensibility | Implemented in v1 milestone |
 | Route generation fallback policy uses deterministic category mapping | Prevent raw provider failures from leaking into chat UX | Implemented in Phase 2 |
-
-## Current State
-
-Phase 5 complete — markdown roadbook delivery is implemented with deterministic day-grouped
-sections, lodging shortlist rendering, and validation context.
+| Output roadbook as Markdown | Immediate usability and low integration overhead | Implemented in Phase 5 |
+| Lodging policy uses strict-first staged fallback with trace | Preserve quality bar while remaining actionable in sparse areas | Implemented in Phase 4 |
 
 ## Evolution
 
@@ -104,4 +108,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-22 after Phase 5 completion*
+*Last updated: 2026-04-22 after v1.0 milestone completion*

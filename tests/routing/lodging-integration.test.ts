@@ -158,7 +158,7 @@ describe('lodging integration', () => {
     expect(searchCalls).toHaveLength(0);
   });
 
-  it('LODG-05 should return no_match with non-empty fallbackTrace when no lodging candidates are found', async () => {
+  it('BOOK-04 should keep no_match fallbackTrace deterministic for markdown explainability', async () => {
     const repository = await createRepository('session-lodging-3', 2);
     const { provider } = buildProvider(async () => ({
       candidates: []
@@ -169,7 +169,6 @@ describe('lodging integration', () => {
 
     expect(result.routingStatus).toBe('ready');
     expect(result.routePlan?.[0]?.lodging?.policyStatus).toBe('no_match');
-    expect((result.routePlan?.[0]?.lodging?.fallbackTrace ?? []).length).toBeGreaterThan(0);
+    expect(result.routePlan?.[0]?.lodging?.fallbackTrace).toContain('strict_8km');
   });
 });
-

@@ -1,0 +1,38 @@
+{
+  "schema_version": "1.0",
+  "name": "roadbook-skill",
+  "display_name": "Roadbook Skill",
+  "version": "0.1.0",
+  "description": "Cycling roadbook planning skill with AMap-backed routing and status outcomes: ready, needs_clarification, fallback.",
+  "protocol": {
+    "transport": "stdio",
+    "rpc": "jsonrpc-2.0"
+  },
+  "entrypoint": "dist/src/skill/roadbook-skill.server.js",
+  "methods": [
+    "initialize",
+    "ping",
+    "skill.describe",
+    "skill.invoke",
+    "shutdown",
+    "exit"
+  ],
+  "tool": {
+    "name": "roadbook.plan",
+    "description": "Generate a cycling roadbook from canonical constraints.",
+    "input_schema_ref": "./schemas/invoke-input.schema.json",
+    "output_schema_ref": "./schemas/invoke-output.schema.json"
+  },
+  "env": {
+    "required": [
+      "AMAP_API_KEY"
+    ],
+    "optional": [
+      "ROADBOOK_STORAGE_PATH"
+    ]
+  },
+  "healthcheck": {
+    "method": "ping"
+  }
+}
+

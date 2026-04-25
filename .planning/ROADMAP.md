@@ -31,8 +31,8 @@ Success criteria:
 3. 解析结果可直接供 POI 推荐与路线拼接使用。
 
 Plans:
-- [ ] 01-01-PLAN.md — 固化输入契约与 A 段假设模板
-- [ ] 01-02-PLAN.md — 定义归一化输出 schema 与 example
+- [x] 01-01-PLAN.md — 固化输入契约与 A 段假设模板
+- [x] 01-02-PLAN.md — 定义归一化输出 schema 与 example
 
 ### Phase 2: POI 推荐策略
 Goal: 基于约束与偏好产出 3-5 个可解释的候选 POI。

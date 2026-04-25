@@ -7,9 +7,9 @@
 
 ### Intent Parsing
 
-- [ ] **INT-01**: User can provide natural language demand and get parsed trip intent fields
-- [ ] **INT-02**: User can omit optional fields and still receive complete structured output
-- [ ] **INT-03**: User receives explicit assumptions and missing information in section A
+- [x] **INT-01**: User can provide natural language demand and get parsed trip intent fields
+- [x] **INT-02**: User can omit optional fields and still receive complete structured output
+- [x] **INT-03**: User receives explicit assumptions and missing information in section A
 
 ### POI Recommendation
 
@@ -62,9 +62,9 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| INT-01 | Phase 1 | Pending |
-| INT-02 | Phase 1 | Pending |
-| INT-03 | Phase 1 | Pending |
+| INT-01 | Phase 1 | Complete |
+| INT-02 | Phase 1 | Complete |
+| INT-03 | Phase 1 | Complete |
 | POI-01 | Phase 2 | Pending |
 | POI-02 | Phase 2 | Pending |
 | POI-03 | Phase 2 | Pending |
@@ -87,4 +87,4 @@
 
 ---
 *Requirements defined: 2026-04-24*
-*Last updated: 2026-04-24 after output-contract update*
+*Last updated: 2026-04-25 after phase 1 completion*

@@ -1,0 +1,184 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://roadbook-tool.local/schema/01-normalized-output.schema.json",
+  "title": "Phase 1 Normalized Output",
+  "type": "object",
+  "required": [
+    "trip_intent",
+    "assumptions",
+    "candidates",
+    "output_views",
+    "metadata"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "trip_intent": {
+      "type": "object",
+      "required": [
+        "natural_language",
+        "structured_input",
+        "transport_mode",
+        "time_budget"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "natural_language": {
+          "type": "string",
+          "minLength": 1
+        },
+        "structured_input": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "transport_mode": {
+          "type": "string",
+          "enum": [
+            "cycling",
+            "walking",
+            "driving",
+            "transit"
+          ],
+          "default": "cycling"
+        },
+        "time_budget": {
+          "type": "string",
+          "enum": [
+            "unbounded",
+            "fixed"
+          ],
+          "default": "unbounded"
+        },
+        "location_conflict": {
+          "type": "object",
+          "required": [
+            "coordinate_wins"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "coordinate_wins": {
+              "type": "boolean"
+            },
+            "message": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "assumptions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "statement"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^A[0-9]+$"
+          },
+          "statement": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "candidates": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "name",
+          "city",
+          "reason",
+          "rank",
+          "selected"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "city": {
+            "type": "string"
+          },
+          "reason": {
+            "type": "string"
+          },
+          "rank": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "selected": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "output_views": {
+      "type": "object",
+      "required": [
+        "human_primary",
+        "machine_readable_appendix"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "human_primary": {
+          "type": "string",
+          "minLength": 1
+        },
+        "machine_readable_appendix": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "required": [
+        "cross_city",
+        "source_priority",
+        "same_city_first"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "cross_city": {
+          "type": "boolean"
+        },
+        "cross_city_note": {
+          "type": "string"
+        },
+        "source_priority": {
+          "type": "string",
+          "enum": [
+            "structured_input > natural_language"
+          ]
+        },
+        "same_city_first": {
+          "type": "boolean"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "cross_city": {
+                "const": true
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "cross_city_note"
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

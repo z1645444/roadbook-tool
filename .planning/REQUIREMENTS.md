@@ -13,9 +13,9 @@
 
 ### POI Recommendation
 
-- [ ] **POI-01**: User receives 3-5 candidate POIs aligned with stated preferences
-- [ ] **POI-02**: Each candidate POI includes concise recommendation reasoning
-- [ ] **POI-03**: Candidate POIs are ordered to support downstream route generation
+- [x] **POI-01**: User receives 3-5 candidate POIs aligned with stated preferences
+- [x] **POI-02**: Each candidate POI includes concise recommendation reasoning
+- [x] **POI-03**: Candidate POIs are ordered to support downstream route generation
 
 ### Routing Output
 
@@ -65,9 +65,9 @@
 | INT-01 | Phase 1 | Complete |
 | INT-02 | Phase 1 | Complete |
 | INT-03 | Phase 1 | Complete |
-| POI-01 | Phase 2 | Pending |
-| POI-02 | Phase 2 | Pending |
-| POI-03 | Phase 2 | Pending |
+| POI-01 | Phase 2 | Complete |
+| POI-02 | Phase 2 | Complete |
+| POI-03 | Phase 2 | Complete |
 | ROUTE-01 | Phase 3 | Pending |
 | ROUTE-02 | Phase 3 | Pending |
 | ROUTE-03 | Phase 3 | Pending |
@@ -87,4 +87,4 @@
 
 ---
 *Requirements defined: 2026-04-24*
-*Last updated: 2026-04-25 after phase 1 completion*
+*Last updated: 2026-04-26 after phase 2 completion*

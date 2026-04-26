@@ -18,10 +18,13 @@
   - Validated in Phase 1: 输入契约与缺失处理
 - [x] 输入缺失时在输出 A 段明确假设与缺失信息，不中断结果生成
   - Validated in Phase 1: 输入契约与缺失处理
+- [x] 生成 3-5 个候选 POI，并给出可读的推荐理由
+  - Validated in Phase 2: POI 推荐策略
+- [x] 候选顺序支持后续路线构建，不出现冲突节点
+  - Validated in Phase 2: POI 推荐策略
 
 ### Active
 
-- [ ] 生成 3-5 个候选 POI，并给出可读的推荐理由
 - [ ] 生成最终路线顺序，并给出每段方式与简要耗时
 - [ ] 输出可唤起高德的 `https://uri.amap.com/...` 完整链接，参数可用
 - [ ] 优先输出地址与二维码内容文本（二维码图片为可选能力）
@@ -46,8 +49,9 @@
 ## Current State
 
 - Phase 1 complete: 输入契约与缺失处理
-- Phase 2 pending: POI 推荐策略
-- 现阶段具备输入归一化契约、A 段假设模板、schema 与 example 工件
+- Phase 2 complete: POI 推荐策略
+- Phase 3 pending: 路线编排规则
+- 现阶段具备输入归一化契约、POI 策略与理由模板、POI 输出 schema 与双场景 example 工件
 
 ## Constraints
 
@@ -76,4 +80,4 @@ This document evolves at phase transitions and milestone boundaries.
 3. Current State drifted? → Refresh Current State section
 
 ---
-*Last updated: 2026-04-25 after phase 1 completion*
+*Last updated: 2026-04-26 after phase 2 completion*

@@ -19,9 +19,9 @@
 
 ### Routing Output
 
-- [ ] **ROUTE-01**: User receives final ordered route from start via stops to destination
-- [ ] **ROUTE-02**: Each route segment includes transport mode and concise duration estimate
-- [ ] **ROUTE-03**: Missing origin or destination is handled with explicit fallback assumptions
+- [x] **ROUTE-01**: User receives final ordered route from start via stops to destination
+- [x] **ROUTE-02**: Each route segment includes transport mode and concise duration estimate
+- [x] **ROUTE-03**: Missing origin or destination is handled with explicit fallback assumptions
 
 ### AMap Link Contract
 
@@ -68,9 +68,9 @@
 | POI-01 | Phase 2 | Complete |
 | POI-02 | Phase 2 | Complete |
 | POI-03 | Phase 2 | Complete |
-| ROUTE-01 | Phase 3 | Pending |
-| ROUTE-02 | Phase 3 | Pending |
-| ROUTE-03 | Phase 3 | Pending |
+| ROUTE-01 | Phase 3 | Complete |
+| ROUTE-02 | Phase 3 | Complete |
+| ROUTE-03 | Phase 3 | Complete |
 | AMAP-01 | Phase 4 | Pending |
 | AMAP-02 | Phase 4 | Pending |
 | AMAP-03 | Phase 4 | Pending |

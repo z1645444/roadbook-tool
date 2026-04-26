@@ -44,8 +44,8 @@ Success criteria:
 3. 候选顺序支持后续路线构建，不出现冲突节点。
 
 Plans:
-- [ ] 02-01-PLAN.md — 固化 POI 候选策略与单句理由模板
-- [ ] 02-02-PLAN.md — 定义 POI 输出 schema 与 normal/insufficient 示例
+- [x] 02-01-PLAN.md — 固化 POI 候选策略与单句理由模板
+- [x] 02-02-PLAN.md — 定义 POI 输出 schema 与 normal/insufficient 示例
 
 ### Phase 3: 路线编排规则
 Goal: 输出按顺序可执行的路线方案，含每段方式与耗时。

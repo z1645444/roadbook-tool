@@ -50,10 +50,15 @@ Plans:
 ### Phase 3: 路线编排规则
 Goal: 输出按顺序可执行的路线方案，含每段方式与耗时。
 Requirements: ROUTE-01, ROUTE-02, ROUTE-03
+**Plans:** 2 plans
 Success criteria:
 1. 路线顺序完整覆盖起点、途经点、终点。
 2. 每段都明确交通方式和简要耗时。
 3. 起终点缺失时可通过假设策略继续生成有效路线说明。
+
+Plans:
+- [ ] 03-01-PLAN.md — 固化路线编排规则与风险说明模板
+- [ ] 03-02-PLAN.md — 定义路线输出 schema 与 normal/degraded 示例
 
 ### Phase 4: 高德链接构造
 Goal: 生成兼容聊天与扫码场景的高德可点击链接。

@@ -37,10 +37,15 @@ Plans:
 ### Phase 2: POI 推荐策略
 Goal: 基于约束与偏好产出 3-5 个可解释的候选 POI。
 Requirements: POI-01, POI-02, POI-03
+**Plans:** 2 plans
 Success criteria:
 1. 候选 POI 数量保持在 3-5 个，且与用户意图一致。
 2. 每个 POI 都有简明且可核对的推荐理由。
 3. 候选顺序支持后续路线构建，不出现冲突节点。
+
+Plans:
+- [ ] 02-01-PLAN.md — 固化 POI 候选策略与单句理由模板
+- [ ] 02-02-PLAN.md — 定义 POI 输出 schema 与 normal/insufficient 示例
 
 ### Phase 3: 路线编排规则
 Goal: 输出按顺序可执行的路线方案，含每段方式与耗时。

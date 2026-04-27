@@ -53,11 +53,16 @@ Success criteria:
 ### Phase 4: 高德链接构造
 Goal: 生成兼容聊天与扫码场景的高德可点击链接。
 Requirements: AMAP-01, AMAP-02, AMAP-03, AMAP-04
+**Plans:** 2 plans
 Success criteria:
 1. 地址段始终输出完整 `https://uri.amap.com/...` 链接。
 2. 链接参数正确编码，且包含 `callnative=1`。
 3. 坐标出现时默认按 GCJ-02 约定表达。
 4. 若附带 scheme，必须提供 https 兜底链接。
+
+Plans:
+- [ ] 04-01-PLAN.md — 固化高德 URI 参数契约与 L0/L1..Ln 生成算法
+- [ ] 04-02-PLAN.md — 构建链接示例集与可执行验证清单
 
 ### Phase 5: 地址与二维码输出协议
 Goal: 固化跨 agent 一致输出结构，二维码不可保证时降级地址输出。

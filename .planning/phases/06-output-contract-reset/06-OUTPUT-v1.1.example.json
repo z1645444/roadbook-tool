@@ -1,0 +1,14 @@
+{
+  "normal_case": {
+    "route_summary": "从上海虹桥到陆家嘴，优先快速路线",
+    "address": "https://uri.amap.com/navigation?to=121.506377,31.245105,陆家嘴&mode=car&policy=1&callnative=1",
+    "eta": "约 34 分钟",
+    "notes": "路况稳定，建议直接导航"
+  },
+  "degraded_case": {
+    "route_summary": "输入信息部分缺失，已按最小信息生成路线建议",
+    "address": "https://uri.amap.com/navigation?to=121.499809,31.239666,目的地&mode=car&policy=1&callnative=1",
+    "eta": "时间估计不稳定",
+    "notes": "degraded: 缺少完整偏好参数，使用默认策略输出"
+  }
+}

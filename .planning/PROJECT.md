@@ -32,12 +32,16 @@
   - Validated in Phase 5: 地址与二维码输出协议
 - [x] Skill 结果遵循稳定输出协议，便于多 agent 消费
   - Validated in Phase 5: 地址与二维码输出协议
+- [x] 主输出契约收敛为 `route_summary/address/eta/notes` 四字段
+  - Validated in Phase 6: 输出主契约重置
+- [x] A-G 退化为兼容视图，不再作为主契约字段源
+  - Validated in Phase 6: 输出主契约重置
 
 ### Active
 
 - [ ] 输出失败兜底说明，覆盖内置浏览器无法唤起等常见场景
-- [ ] 下一里程碑重置主输出契约：路线摘要、地址、预计花费时间、其他说明（移除二维码字段）
-- [ ] 同步清理 A-G 与“主契约字段”冲突口径，确保单一真相
+- [ ] 定义 v1.0 -> v1.1 迁移规则（字段保留/删除/重命名）
+- [ ] 完成兼容层映射文档，避免旧输出结构与主契约混用
 
 ### Out of Scope
 
@@ -60,6 +64,7 @@
 - Phase 3 complete: 路线编排规则
 - Phase 4 complete: 高德链接构造
 - Phase 5 complete: 地址与二维码输出协议
+- Phase 6 complete: 输出主契约重置（四字段主契约 + schema/example/checklist）
 - v1.0 shipped: 已形成可复用 skill 文档资产（协议、模板、schema、example、checklist）
 
 ## Constraints
@@ -68,7 +73,7 @@
 - **Encoding**: URL 参数必须编码，坐标按 GCJ-02，包含 `callnative=1`
 - **Interaction**: 不执行真实请求、不发送消息；二维码图片仅在脚本能力可用时输出
 - **Compatibility**: 若提供 `amapuri://` 或 `androidamap://`，必须附 `https` 兜底
-- **Output Contract**: 输出采用固定结构（不再强制 A-G 七段）
+- **Output Contract**: v1.1 主契约固定为 `route_summary/address/eta/notes` 四字段（A-G 仅兼容视图）
 
 ## Key Decisions
 
@@ -79,13 +84,13 @@
 | 链接优先 `https://uri.amap.com/...` | Telegram/扫码场景兼容性更好 | Active |
 | 二维码能力按可用性降级 | 防止因为环境缺依赖导致输出失败 | Active |
 | v1.0 结束后归档 roadmap/requirements | 控制上下文体积并保留历史快照 | Shipped |
-| 下一里程碑移除二维码主契约 | 解决文档口径冲突并收敛输出字段 | Planned |
+| 下一里程碑移除二维码主契约 | 解决文档口径冲突并收敛输出字段 | Phase 6 Complete |
 
 ## Next Milestone Goals
 
-- 完成“移除二维码主契约”迁移，保留地址必达与可复制性。
-- 统一 `PROJECT/ROADMAP/REQUIREMENTS/AGENTS` 对输出结构的表述。
-- 为新主契约补齐新的 schema/example/checklist。
+- 完成 Phase 7 的兼容层与迁移策略（v1.0 -> v1.1）。
+- 在 Phase 8 统一 `PROJECT/ROADMAP/REQUIREMENTS/AGENTS` 对输出结构的表述。
+- 固化跨 runtime 的迁移校验与回归检查流程。
 
 ## Evolution
 
@@ -97,4 +102,4 @@ This document evolves at phase transitions and milestone boundaries.
 3. Current State drifted? → Refresh Current State section
 
 ---
-*Last updated: 2026-04-27 after v1.0 milestone*
+*Last updated: 2026-04-27 after phase 6 completion*

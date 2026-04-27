@@ -8,8 +8,8 @@
 
 ### Output Contract Reset
 
-- [ ] **OC-01**: Primary output contract uses exactly `route_summary`, `address`, `eta`, `notes` as first-class fields
-- [ ] **OC-02**: QR-related fields are removed from the primary contract and examples in v1.1
+- [x] **OC-01**: Primary output contract uses exactly `route_summary`, `address`, `eta`, `notes` as first-class fields
+- [x] **OC-02**: QR-related fields are removed from the primary contract and examples in v1.1
 - [ ] **OC-03**: A-G is retained only as an optional compatibility view, not as the canonical contract
 
 ### Consistency and Migration
@@ -30,8 +30,8 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| OC-01 | Phase 6 | Pending |
-| OC-02 | Phase 6 | Pending |
+| OC-01 | Phase 6 | Complete |
+| OC-02 | Phase 6 | Complete |
 | OC-03 | Phase 7 | Pending |
 | OC-04 | Phase 8 | Pending |
 | OC-05 | Phase 8 | Pending |

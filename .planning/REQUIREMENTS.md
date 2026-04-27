@@ -32,10 +32,10 @@
 
 ### Address and QR Output
 
-- [ ] **OUT-01**: User receives an address URL output section as the primary deliverable
-- [ ] **OUT-02**: User receives QR payload text when QR generation step is available
-- [ ] **OUT-03**: QR payload text is byte-identical to the address URL
-- [ ] **OUT-04**: When QR cannot be guaranteed, output degrades to address-only with explanation
+- [x] **OUT-01**: User receives an address URL output section as the primary deliverable
+- [x] **OUT-02**: User receives QR payload text when QR generation step is available
+- [x] **OUT-03**: QR payload text is byte-identical to the address URL
+- [x] **OUT-04**: When QR cannot be guaranteed, output degrades to address-only with explanation
 
 ## v2 Requirements
 
@@ -71,14 +71,14 @@
 | ROUTE-01 | Phase 3 | Complete |
 | ROUTE-02 | Phase 3 | Complete |
 | ROUTE-03 | Phase 3 | Complete |
-| AMAP-01 | Phase 4 | Pending |
-| AMAP-02 | Phase 4 | Pending |
-| AMAP-03 | Phase 4 | Pending |
-| AMAP-04 | Phase 4 | Pending |
-| OUT-01 | Phase 5 | Pending |
-| OUT-02 | Phase 5 | Pending |
-| OUT-03 | Phase 5 | Pending |
-| OUT-04 | Phase 5 | Pending |
+| AMAP-01 | Phase 4 | Complete |
+| AMAP-02 | Phase 4 | Complete |
+| AMAP-03 | Phase 4 | Complete |
+| AMAP-04 | Phase 4 | Complete |
+| OUT-01 | Phase 5 | Complete |
+| OUT-02 | Phase 5 | Complete |
+| OUT-03 | Phase 5 | Complete |
+| OUT-04 | Phase 5 | Complete |
 
 **Coverage:**
 - v1 requirements: 17 total
@@ -87,4 +87,4 @@
 
 ---
 *Requirements defined: 2026-04-24*
-*Last updated: 2026-04-26 after phase 2 completion*
+*Last updated: 2026-04-27 after phase 5 completion*

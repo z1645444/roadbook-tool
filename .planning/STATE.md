@@ -1,38 +1,33 @@
 ---
 gsd_state_version: 1.0
-milestone: v1.0
-milestone_name: milestone
-status: v1.0 milestone complete
-last_updated: "2026-04-27T08:20:07.336Z"
+milestone: v1.1
+milestone_name: output-contract-reset
+status: planning
+last_updated: "2026-04-27T08:40:00.000Z"
 progress:
-  total_phases: 5
-  completed_phases: 5
-  total_plans: 10
-  completed_plans: 10
-  percent: 100
+  total_phases: 3
+  completed_phases: 0
+  total_plans: 6
+  completed_plans: 0
+  percent: 0
 ---
 
 # STATE
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-04-26)
+See: .planning/PROJECT.md (updated 2026-04-27)
 
 **Core value:** 在输入不完整的情况下，仍能稳定产出符合高德 URI 规范且可复制使用的路线结果。
-**Current focus:** Phase 05 — address-and-qr-output-protocol
+**Current focus:** Milestone v1.1 — output-contract-reset
 
 ## Status
 
 - Initialization: complete
-- Requirements defined: complete
-- Roadmap created: complete
-- Phase 1 execution: complete
-- Phase 2 execution: complete
-- Phase 3 execution: complete
-- Phase 4 execution: complete
-- Phase 5 execution: complete
+- Requirements defined: in_progress (v1.1 draft created)
+- Roadmap created: in_progress (v1.1 phases drafted)
 - Milestone v1.0 archived: complete
-- Next command: `$gsd-new-milestone`
+- Next command: `$gsd-plan-phase 6`
 
 ## Scope Guardrails
 
@@ -42,7 +37,7 @@ See: .planning/PROJECT.md (updated 2026-04-26)
 
 **Completed Phase:** 5 (address-and-qr-output-protocol) — 2/2 plans complete — 2026-04-27
 
-**Planned Phase:** None (all roadmap phases complete in v1.0).
+**Planned Phase:** 6 (输出主契约重置) — 2 plans — 2026-04-27T08:40:00.000Z
 
 ## Deferred Items
 
@@ -50,4 +45,4 @@ Items acknowledged and deferred at milestone close on 2026-04-27:
 
 | Category | Item | Status |
 |----------|------|--------|
-| todo | 2026-04-27-milestone-a-g-output-contract-remove-qr | pending |
+| todo | 2026-04-27-milestone-a-g-output-contract-remove-qr | converted_to_milestone_v1.1 |

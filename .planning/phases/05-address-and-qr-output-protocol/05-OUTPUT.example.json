@@ -1,0 +1,109 @@
+{
+  "normal_case": {
+    "route_summary": "人民广场出发，经外滩后到陆家嘴。",
+    "address": {
+      "primary_link": "https://uri.amap.com/navigation?from=%E4%BA%BA%E6%B0%91%E5%B9%BF%E5%9C%BA&to=%E9%99%86%E5%AE%B6%E5%98%B4&callnative=1",
+      "segment_links": [
+        "https://uri.amap.com/navigation?from=%E4%BA%BA%E6%B0%91%E5%B9%BF%E5%9C%BA&to=%E5%A4%96%E6%BB%A9&callnative=1",
+        "https://uri.amap.com/navigation?from=%E5%A4%96%E6%BB%A9&to=%E9%99%86%E5%AE%B6%E5%98%B4&callnative=1"
+      ]
+    },
+    "eta": {
+      "total": "约 38 分钟",
+      "is_estimated": true,
+      "per_segment": [
+        {
+          "segment_index": 1,
+          "duration_note": "约 15 分钟"
+        },
+        {
+          "segment_index": 2,
+          "duration_note": "约 23 分钟"
+        }
+      ]
+    },
+    "notes": {
+      "text": "当前为离线估算值，路况变化会影响时长。"
+    },
+    "qr": {
+      "status": "available",
+      "payload_text": "https://uri.amap.com/navigation?from=%E4%BA%BA%E6%B0%91%E5%B9%BF%E5%9C%BA&to=%E9%99%86%E5%AE%B6%E5%98%B4&callnative=1",
+      "payload_equals_primary_link": true,
+      "consistency_check_method": "utf8_byte_compare"
+    },
+    "output_views": {
+      "human_primary": "已生成地址与二维码文本载荷。",
+      "ag_sections": {
+        "A": "假设与边界：不执行真实请求，不发送消息，不生成二维码图片。",
+        "B": "路线摘要：人民广场 -> 外滩 -> 陆家嘴。",
+        "C": "地址：提供 L0 主链路与 L1..Ln 分段链路。",
+        "D": "预计耗时：约 38 分钟。",
+        "E": "二维码状态：available。",
+        "F": "风险说明：离线估算值可能偏差。",
+        "G": "机读附录：见 metadata 与 qr 一致性字段。"
+      }
+    },
+    "metadata": {
+      "version": "5.0.0",
+      "created_at": "2026-04-27T08:05:28Z",
+      "no_live_request": true,
+      "no_message_send": true,
+      "no_qr\u005fimage": true,
+      "requirements_map": ["OUT-01", "OUT-02", "OUT-03", "OUT-04"]
+    }
+  },
+  "degraded_case": {
+    "route_summary": "上海站出发，直达虹桥火车站。",
+    "address": {
+      "primary_link": "https://uri.amap.com/navigation?from=%E4%B8%8A%E6%B5%B7%E7%AB%99&to=%E8%99%B9%E6%A1%A5%E7%81%AB%E8%BD%A6%E7%AB%99&callnative=1",
+      "segment_links": [
+        "https://uri.amap.com/navigation?from=%E4%B8%8A%E6%B5%B7%E7%AB%99&to=%E9%9D%99%E5%AE%89%E5%AF%BA&callnative=1",
+        "https://uri.amap.com/navigation?from=%E9%9D%99%E5%AE%89%E5%AF%BA&to=%E8%99%B9%E6%A1%A5%E7%81%AB%E8%BD%A6%E7%AB%99&callnative=1"
+      ]
+    },
+    "eta": {
+      "total": "约 47 分钟",
+      "is_estimated": true,
+      "per_segment": [
+        {
+          "segment_index": 1,
+          "duration_note": "约 20 分钟"
+        },
+        {
+          "segment_index": 2,
+          "duration_note": "约 27 分钟"
+        }
+      ]
+    },
+    "notes": {
+      "text": "二维码当前不可用，已提供可复制地址链接。",
+      "degrade_reason": "二维码能力暂不可用，已降级为 address-only 输出。"
+    },
+    "qr": {
+      "status": "unavailable",
+      "payload_text": "",
+      "payload_equals_primary_link": false,
+      "consistency_check_method": "utf8_byte_compare"
+    },
+    "output_views": {
+      "human_primary": "二维码不可用，已保留完整地址输出。",
+      "ag_sections": {
+        "A": "假设与边界：不执行真实请求，不发送消息，不生成二维码图片。",
+        "B": "路线摘要：上海站 -> 静安寺 -> 虹桥火车站。",
+        "C": "地址：提供 L0 主链路与 L1..Ln 分段链路。",
+        "D": "预计耗时：约 47 分钟。",
+        "E": "二维码状态：unavailable。",
+        "F": "降级说明：二维码当前不可用，已提供可复制地址链接。",
+        "G": "机读附录：包含 degrade_reason 与一致性字段。"
+      }
+    },
+    "metadata": {
+      "version": "5.0.0",
+      "created_at": "2026-04-27T08:05:28Z",
+      "no_live_request": true,
+      "no_message_send": true,
+      "no_qr\u005fimage": true,
+      "requirements_map": ["OUT-01", "OUT-02", "OUT-03", "OUT-04"]
+    }
+  }
+}

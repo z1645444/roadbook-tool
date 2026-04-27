@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://roadbook-tool.local/schemas/06-output-v1.1.schema.json",
+  "title": "Phase 06 Primary Output Contract v1.1",
+  "description": "Primary output contract with exactly four ordered first-class fields.",
+  "type": "object",
+  "required": [
+    "route_summary",
+    "address",
+    "eta",
+    "notes"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "route_summary": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Route summary for the planned trip."
+    },
+    "address": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Copyable address output, preferably an https://uri.amap.com/... link with callnative=1."
+    },
+    "eta": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Estimated duration or arrival guidance."
+    },
+    "notes": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Context notes, including degraded-path explanation when needed."
+    }
+  }
+}

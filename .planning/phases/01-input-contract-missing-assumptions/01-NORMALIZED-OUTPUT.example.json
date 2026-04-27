@@ -1,0 +1,78 @@
+{
+  "trip_intent": {
+    "natural_language": "周六从上海徐汇出发，想逛人文街区和公园，晚点回到苏州工业园区附近。",
+    "structured_input": {
+      "origin": {
+        "name": "徐家汇",
+        "city": "上海"
+      },
+      "destination": {
+        "name": "金鸡湖",
+        "city": "苏州"
+      },
+      "preferences": {
+        "style": "citywalk"
+      }
+    },
+    "transport_mode": "cycling",
+    "time_budget": "unbounded",
+    "location_conflict": {
+      "coordinate_wins": true,
+      "message": "地点文本与坐标冲突，按坐标为准"
+    }
+  },
+  "assumptions": [
+    {
+      "id": "A1",
+      "statement": "终点信息采用结构化输入，起终点缺失风险已声明。"
+    },
+    {
+      "id": "A2",
+      "statement": "未提供交通方式时默认 cycling。"
+    },
+    {
+      "id": "A3",
+      "statement": "未提供预算时按 unbounded 处理并提示未限制时长。"
+    }
+  ],
+  "candidates": [
+    {
+      "name": "武康路",
+      "city": "上海",
+      "reason": "同城优先且与 citywalk 偏好匹配",
+      "rank": 1,
+      "selected": true
+    },
+    {
+      "name": "愚园路",
+      "city": "上海",
+      "reason": "同城优先，文化街区密度高",
+      "rank": 2,
+      "selected": false
+    },
+    {
+      "name": "金鸡湖步道",
+      "city": "苏州",
+      "reason": "跨城补充候选，满足终点城市偏好",
+      "rank": 3,
+      "selected": false
+    }
+  ],
+  "output_views": {
+    "human_primary": "已按 structured_input 优先完成归一化；同城优先候选已给出，并保留跨城不确定性提示。",
+    "machine_readable_appendix": {
+      "assumption_ids": [
+        "A1",
+        "A2",
+        "A3"
+      ],
+      "same_city_first_applied": true
+    }
+  },
+  "metadata": {
+    "cross_city": true,
+    "cross_city_note": "行程包含上海与苏州，时长存在不确定性",
+    "source_priority": "structured_input > natural_language",
+    "same_city_first": true
+  }
+}

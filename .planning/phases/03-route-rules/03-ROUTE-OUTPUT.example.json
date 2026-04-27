@@ -1,0 +1,189 @@
+{
+  "normal_case": {
+    "trip_context": {
+      "target_city": "上海",
+      "input_status": "complete",
+      "segment_mode_input": {
+        "raw_text": "先地铁到武康路，再骑行去徐家汇公园，最后步行到晚餐点",
+        "parsed_segments": [
+          {"segment_index": 1, "mode": "transit"},
+          {"segment_index": 2, "mode": "cycling"},
+          {"segment_index": 3, "mode": "walking"}
+        ],
+        "unmatched_segments_default_mode": "cycling",
+        "parse_confidence": "high"
+      }
+    },
+    "route_plan": {
+      "ordered_points": [
+        {"role": "origin", "name": "静安寺", "city": "上海"},
+        {"role": "waypoint", "name": "武康路历史文化风貌区", "city": "上海"},
+        {"role": "waypoint", "name": "徐家汇公园", "city": "上海"},
+        {"role": "destination", "name": "衡山路晚餐点", "city": "上海"}
+      ],
+      "segments": [
+        {
+          "segment_index": 1,
+          "from": "静安寺",
+          "to": "武康路历史文化风貌区",
+          "mode": "transit",
+          "duration_note": "约20-30分钟，含步行换乘",
+          "mode_source": "nl_parse",
+          "loop_flag": false,
+          "risk_note": "交通状况波动可能影响到达时间"
+        },
+        {
+          "segment_index": 2,
+          "from": "武康路历史文化风貌区",
+          "to": "徐家汇公园",
+          "mode": "cycling",
+          "duration_note": "约15-25分钟",
+          "mode_source": "user",
+          "loop_flag": false,
+          "risk_note": "高峰期路口等待时间可能增加"
+        },
+        {
+          "segment_index": 3,
+          "from": "徐家汇公园",
+          "to": "衡山路晚餐点",
+          "mode": "walking",
+          "duration_note": "约10-15分钟",
+          "mode_source": "nl_parse",
+          "loop_flag": false,
+          "risk_note": "夜间人流较多时步行速度会下降"
+        }
+      ],
+      "loop_detected": false,
+      "budget_conflict": false,
+      "route_adjustment": "none",
+      "decision_refs": ["D-01", "D-02", "D-03", "D-05", "D-10"]
+    },
+    "fallback_assumptions": {
+      "origin_applied": false,
+      "destination_applied": false,
+      "a_section_note": "输入完整，无需起终点兜底。",
+      "body_note": "按用户自然语言优先解析后的段级交通方式执行。"
+    },
+    "output_views": {
+      "human_primary": "路线已按起点-途经-终点顺序生成，每段均包含交通方式与耗时说明。",
+      "machine_readable_appendix": {
+        "decision_refs": ["D-01", "D-02", "D-03", "D-05", "D-10"],
+        "no_live_request": true,
+        "no_uri_construction": true,
+        "no_qr_generation": true
+      },
+      "ag_sections": {
+        "A": "假设：本次输入完整，无需兜底补位。",
+        "B": "路线摘要：静安寺 -> 武康路 -> 徐家汇公园 -> 衡山路晚餐点。",
+        "C": "分段明细：3 段，方式分别为地铁/骑行/步行。",
+        "D": "风险提示：高峰期可能影响分段耗时。",
+        "E": "预算与回路：未触发预算冲突，无回路调整。",
+        "F": "边界说明：本阶段不执行真实请求，不输出 URI 或码图。",
+        "G": "机读附录：见 decision_refs 与 segment_mode_input。"
+      }
+    },
+    "metadata": {
+      "route_version": "v1",
+      "created_at": "2026-04-27T00:00:00Z"
+    }
+  },
+  "degraded_case": {
+    "trip_context": {
+      "target_city": "上海",
+      "input_status": "incomplete",
+      "segment_mode_input": {
+        "raw_text": "先去老街再去公园，方式你帮我安排",
+        "parsed_segments": [
+          {"segment_index": 1, "mode": "walking"}
+        ],
+        "unmatched_segments_default_mode": "cycling",
+        "parse_confidence": "medium"
+      }
+    },
+    "route_plan": {
+      "ordered_points": [
+        {"role": "origin", "name": "上海市中心", "city": "上海"},
+        {"role": "waypoint", "name": "武康路历史文化风貌区", "city": "上海"},
+        {"role": "waypoint", "name": "徐家汇公园", "city": "上海"},
+        {"role": "waypoint", "name": "武康路历史文化风貌区", "city": "上海"},
+        {"role": "destination", "name": "徐家汇公园", "city": "上海"}
+      ],
+      "segments": [
+        {
+          "segment_index": 1,
+          "from": "上海市中心",
+          "to": "武康路历史文化风貌区",
+          "mode": "walking",
+          "duration_note": "约25-40分钟",
+          "mode_source": "nl_parse",
+          "loop_flag": false,
+          "risk_note": "自然语言解析粒度较粗，耗时仅作区间参考"
+        },
+        {
+          "segment_index": 2,
+          "from": "武康路历史文化风貌区",
+          "to": "徐家汇公园",
+          "mode": "cycling",
+          "duration_note": "约15-25分钟",
+          "mode_source": "fallback",
+          "loop_flag": true,
+          "risk_note": "未命中段采用默认骑行，可能与实际偏好不完全一致"
+        },
+        {
+          "segment_index": 3,
+          "from": "徐家汇公园",
+          "to": "武康路历史文化风貌区",
+          "mode": "cycling",
+          "duration_note": "约15-25分钟",
+          "mode_source": "fallback",
+          "loop_flag": true,
+          "risk_note": "非连续重复点已保留，当前路线可能绕路"
+        },
+        {
+          "segment_index": 4,
+          "from": "武康路历史文化风貌区",
+          "to": "徐家汇公园",
+          "mode": "cycling",
+          "duration_note": "约15-25分钟",
+          "mode_source": "fallback",
+          "loop_flag": true,
+          "risk_note": "回路与预算冲突已触发预算优先调整"
+        }
+      ],
+      "loop_detected": true,
+      "budget_conflict": true,
+      "route_adjustment": "budget_precedence",
+      "decision_refs": ["D-03", "D-05", "D-06", "D-09", "D-12", "D-13"]
+    },
+    "fallback_assumptions": {
+      "origin_applied": true,
+      "origin_source": "city_center",
+      "destination_applied": true,
+      "destination_source": "last_candidate_poi",
+      "a_section_note": "起点缺失已兜底为城市中心；终点缺失已兜底为最后一个候选 POI。",
+      "body_note": "正文已显式标注兜底来源与预算优先调整。"
+    },
+    "output_views": {
+      "human_primary": "输入不完整时已按兜底策略继续生成路线，并显式提示可能绕路与预算优先调整。",
+      "machine_readable_appendix": {
+        "decision_refs": ["D-03", "D-05", "D-06", "D-09", "D-12", "D-13"],
+        "no_live_request": true,
+        "no_uri_construction": true,
+        "no_qr_generation": true
+      },
+      "ag_sections": {
+        "A": "假设：起终点缺失，采用城市中心与最后候选 POI 兜底。",
+        "B": "路线摘要：城市中心 -> 武康路 -> 徐家汇公园 -> 武康路 -> 徐家汇公园。",
+        "C": "分段明细：4 段，未命中段默认骑行。",
+        "D": "风险提示：非连续重复点保留，可能绕路。",
+        "E": "预算与回路：回路意图与预算冲突，已按预算优先。",
+        "F": "边界说明：本阶段不执行真实请求，不输出 URI 或码图。",
+        "G": "机读附录：decision_refs、segment_mode_input、fallback_assumptions 已输出。"
+      }
+    },
+    "metadata": {
+      "route_version": "v1",
+      "created_at": "2026-04-27T00:00:00Z"
+    }
+  }
+}

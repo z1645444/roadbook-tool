@@ -1,0 +1,392 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://roadbook-tool.local/schema/02-poi-output.schema.json",
+  "title": "Phase 2 POI Output",
+  "type": "object",
+  "$comment": "POI-01 POI-02 POI-03; D-01 D-02 D-05 D-06 D-07 D-08 D-09 D-10 D-12 D-13 D-14 D-15 D-16 D-17 D-18 D-19 D-20; no live requests, no route/URI/qrcode payloads.",
+  "required": [
+    "trip_context",
+    "poi_candidates",
+    "ranking_metadata",
+    "output_views",
+    "metadata"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "trip_context": {
+      "type": "object",
+      "description": "D-17: 触发低置信所需的输入完整度上下文。",
+      "required": [
+        "request_text",
+        "target_city",
+        "information_status"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "request_text": {
+          "type": "string",
+          "minLength": 1
+        },
+        "target_city": {
+          "type": "string",
+          "minLength": 1
+        },
+        "information_status": {
+          "type": "string",
+          "enum": [
+            "complete",
+            "incomplete",
+            "conflicted"
+          ]
+        },
+        "missing_key_fields": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "poi_candidates": {
+      "type": "array",
+      "description": "D-01/D-02: 候选数量由 candidate_count_mode 条件分支决定。",
+      "items": {
+        "type": "object",
+        "required": [
+          "poi_id",
+          "name",
+          "city",
+          "district",
+          "same_city",
+          "rank",
+          "category",
+          "dedupe_key",
+          "is_diversity_slot",
+          "same_category_streak_index",
+          "reason",
+          "reason_template_id",
+          "confidence",
+          "confidence_tag_visible"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "poi_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "city": {
+            "type": "string",
+            "minLength": 1
+          },
+          "district": {
+            "type": "string",
+            "minLength": 1
+          },
+          "same_city": {
+            "type": "boolean",
+            "description": "D-05/D-08: 用于同城优先与跨城后置校验。"
+          },
+          "rank": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "category": {
+            "type": "string",
+            "minLength": 1,
+            "description": "D-13: Top3 至少覆盖 2 类别。"
+          },
+          "dedupe_key": {
+            "type": "string",
+            "minLength": 3,
+            "description": "D-14/D-15: 同名+近地址统一去重键。"
+          },
+          "is_diversity_slot": {
+            "type": "boolean",
+            "description": "D-13: 标记用于提升类别多样性的候选位。"
+          },
+          "same_category_streak_index": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 2,
+            "description": "D-16: 同类最多连续 2 个。"
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 140,
+            "pattern": "^[^\\n]+[。.!?！？]$",
+            "description": "D-09/D-10: 单句理由，固定为匹配点+场景价值。"
+          },
+          "reason_template_id": {
+            "type": "string",
+            "pattern": "^R[1-9][0-9]*$",
+            "description": "D-09/D-10/D-12: 关联模板 ID，支持低置信变体。"
+          },
+          "confidence": {
+            "type": "string",
+            "enum": [
+              "high",
+              "medium",
+              "low"
+            ],
+            "description": "D-12/D-18: 低置信场景逐候选显式标注。"
+          },
+          "confidence_tag_visible": {
+            "type": "boolean",
+            "description": "D-12: 常规场景 false，仅低置信场景 true。"
+          }
+        }
+      }
+    },
+    "ranking_metadata": {
+      "type": "object",
+      "description": "D-05/D-06/D-07/D-08: 排序链路与同城优先元数据。",
+      "required": [
+        "candidate_count_mode",
+        "same_city_first",
+        "primary_sort_order",
+        "popularity_as_fallback_only",
+        "cross_city_after_same_city"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "candidate_count_mode": {
+          "type": "string",
+          "enum": [
+            "normal",
+            "insufficient"
+          ],
+          "description": "D-01/D-02: normal=3-5, insufficient=2-3。"
+        },
+        "same_city_first": {
+          "type": "boolean",
+          "const": true,
+          "description": "D-05: 同城优先强约束。"
+        },
+        "primary_sort_order": {
+          "type": "array",
+          "const": [
+            "semantic_match",
+            "preference_match",
+            "reachability",
+            "popularity"
+          ],
+          "description": "D-05/D-07: 热门度仅兜底，不能越过前序信号。"
+        },
+        "popularity_as_fallback_only": {
+          "type": "boolean",
+          "const": true
+        },
+        "cross_city_after_same_city": {
+          "type": "boolean",
+          "const": true,
+          "description": "D-08: 跨城候选默认后置。"
+        }
+      }
+    },
+    "output_views": {
+      "type": "object",
+      "required": [
+        "human_primary",
+        "machine_readable_appendix"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "human_primary": {
+          "type": "string",
+          "minLength": 1
+        },
+        "machine_readable_appendix": {
+          "type": "object",
+          "required": [
+            "decision_refs",
+            "no_live_request"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "decision_refs": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string",
+                "pattern": "^D-[0-9]{2}$"
+              },
+              "uniqueItems": true
+            },
+            "no_live_request": {
+              "type": "boolean",
+              "const": true
+            }
+          }
+        }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "description": "D-17/D-18/D-19/D-20: 低置信模式与风险提示字段。",
+      "required": [
+        "low_confidence_mode"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "low_confidence_mode": {
+          "type": "boolean"
+        },
+        "risk_note": {
+          "type": "string",
+          "minLength": 1
+        },
+        "supplement_suggestions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "maxItems": 2,
+          "uniqueItems": true
+        },
+        "insufficiency_marker": {
+          "type": "boolean"
+        },
+        "insufficiency_note": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "$comment": "D-01/POI-01: normal 模式固定 3-5 候选。",
+      "if": {
+        "properties": {
+          "ranking_metadata": {
+            "properties": {
+              "candidate_count_mode": {
+                "const": "normal"
+              }
+            },
+            "required": [
+              "candidate_count_mode"
+            ]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "poi_candidates": {
+            "minItems": 3,
+            "maxItems": 5
+          },
+          "metadata": {
+            "properties": {
+              "insufficiency_marker": {
+                "const": false
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "$comment": "D-02/POI-01: insufficient 模式固定 2-3 候选并显式信息不足标记。",
+      "if": {
+        "properties": {
+          "ranking_metadata": {
+            "properties": {
+              "candidate_count_mode": {
+                "const": "insufficient"
+              }
+            },
+            "required": [
+              "candidate_count_mode"
+            ]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "poi_candidates": {
+            "minItems": 2,
+            "maxItems": 3
+          },
+          "metadata": {
+            "required": [
+              "insufficiency_marker",
+              "insufficiency_note"
+            ],
+            "properties": {
+              "insufficiency_marker": {
+                "const": true
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "$comment": "D-17/D-18/D-19/D-20/POI-02: 低置信时仍可输出候选，但必须显示风险与补充建议。",
+      "if": {
+        "properties": {
+          "metadata": {
+            "properties": {
+              "low_confidence_mode": {
+                "const": true
+              }
+            },
+            "required": [
+              "low_confidence_mode"
+            ]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "metadata": {
+            "required": [
+              "risk_note",
+              "supplement_suggestions"
+            ],
+            "properties": {
+              "supplement_suggestions": {
+                "minItems": 1,
+                "maxItems": 2
+              }
+            }
+          },
+          "poi_candidates": {
+            "items": {
+              "properties": {
+                "confidence": {
+                  "const": "low"
+                },
+                "confidence_tag_visible": {
+                  "const": true
+                }
+              }
+            }
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "poi_candidates": {
+            "items": {
+              "properties": {
+                "confidence_tag_visible": {
+                  "const": false
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

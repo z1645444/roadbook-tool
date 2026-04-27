@@ -1,0 +1,201 @@
+{
+  "normal_case": {
+    "trip_context": {
+      "request_text": "下周六在上海想逛人文街区和公园，晚饭前结束。",
+      "target_city": "上海",
+      "information_status": "complete"
+    },
+    "poi_candidates": [
+      {
+        "poi_id": "poi-sh-001",
+        "name": "武康路历史文化风貌区",
+        "city": "上海",
+        "district": "徐汇区",
+        "same_city": true,
+        "rank": 1,
+        "category": "historic_street",
+        "dedupe_key": "武康路历史文化风貌区|徐汇区复兴西路",
+        "is_diversity_slot": false,
+        "same_category_streak_index": 1,
+        "reason": "匹配点：该地点与人文街区需求高度一致；场景价值：可作为城市漫步起点减少折返时间。",
+        "reason_template_id": "R1",
+        "confidence": "high",
+        "confidence_tag_visible": false
+      },
+      {
+        "poi_id": "poi-sh-002",
+        "name": "愚园路街区",
+        "city": "上海",
+        "district": "长宁区",
+        "same_city": true,
+        "rank": 2,
+        "category": "historic_street",
+        "dedupe_key": "愚园路街区|长宁区愚园路",
+        "is_diversity_slot": false,
+        "same_category_streak_index": 2,
+        "reason": "匹配点：该地点与城市街区偏好一致；场景价值：同城衔接顺序稳定便于后续路线编排。",
+        "reason_template_id": "R2",
+        "confidence": "medium",
+        "confidence_tag_visible": false
+      },
+      {
+        "poi_id": "poi-sh-003",
+        "name": "徐家汇公园",
+        "city": "上海",
+        "district": "徐汇区",
+        "same_city": true,
+        "rank": 3,
+        "category": "urban_park",
+        "dedupe_key": "徐家汇公园|徐汇区天平路",
+        "is_diversity_slot": true,
+        "same_category_streak_index": 1,
+        "reason": "匹配点：该地点补足公园停留需求；场景价值：能在晚饭前提供低强度休息与步行缓冲。",
+        "reason_template_id": "R5",
+        "confidence": "high",
+        "confidence_tag_visible": false
+      },
+      {
+        "poi_id": "poi-sz-004",
+        "name": "金鸡湖步道",
+        "city": "苏州",
+        "district": "工业园区",
+        "same_city": false,
+        "rank": 4,
+        "category": "waterfront_walk",
+        "dedupe_key": "金鸡湖步道|工业园区星港街",
+        "is_diversity_slot": false,
+        "same_category_streak_index": 1,
+        "reason": "匹配点：该地点语义相关度次高可作补位；场景价值：在同城池充足后提供跨城尾部备用选择。",
+        "reason_template_id": "R3",
+        "confidence": "medium",
+        "confidence_tag_visible": false
+      }
+    ],
+    "ranking_metadata": {
+      "candidate_count_mode": "normal",
+      "same_city_first": true,
+      "primary_sort_order": [
+        "semantic_match",
+        "preference_match",
+        "reachability",
+        "popularity"
+      ],
+      "popularity_as_fallback_only": true,
+      "cross_city_after_same_city": true
+    },
+    "output_views": {
+      "human_primary": "已按同城优先给出 4 个候选，前 3 名覆盖人文街区与公园两类场景，跨城候选仅作为尾部补位。",
+      "machine_readable_appendix": {
+        "decision_refs": [
+          "D-01",
+          "D-05",
+          "D-08",
+          "D-13",
+          "D-16"
+        ],
+        "no_live_request": true
+      }
+    },
+    "metadata": {
+      "low_confidence_mode": false,
+      "insufficiency_marker": false
+    }
+  },
+  "insufficient_case": {
+    "trip_context": {
+      "request_text": "明天下午想找个适合拍照和散步的地方，城市和交通方式都不确定。",
+      "target_city": "上海",
+      "information_status": "incomplete",
+      "missing_key_fields": [
+        "precise_destination_keyword",
+        "time_window",
+        "transport_preference"
+      ]
+    },
+    "poi_candidates": [
+      {
+        "poi_id": "poi-sh-101",
+        "name": "前滩休闲公园",
+        "city": "上海",
+        "district": "浦东新区",
+        "same_city": true,
+        "rank": 1,
+        "category": "urban_park",
+        "dedupe_key": "前滩休闲公园|浦东新区东育路",
+        "is_diversity_slot": false,
+        "same_category_streak_index": 1,
+        "reason": "匹配点：该地点与散步和拍照需求部分匹配；场景价值：可在信息不足时维持同城可执行候选输出。",
+        "reason_template_id": "R4",
+        "confidence": "low",
+        "confidence_tag_visible": true
+      },
+      {
+        "poi_id": "poi-sh-102",
+        "name": "武康路历史文化风貌区",
+        "city": "上海",
+        "district": "徐汇区",
+        "same_city": true,
+        "rank": 2,
+        "category": "historic_street",
+        "dedupe_key": "武康路历史文化风貌区|徐汇区复兴西路",
+        "is_diversity_slot": true,
+        "same_category_streak_index": 1,
+        "reason": "匹配点：该地点可覆盖街区拍照偏好；场景价值：作为低置信补位可提高候选类别多样性。",
+        "reason_template_id": "R5",
+        "confidence": "low",
+        "confidence_tag_visible": true
+      },
+      {
+        "poi_id": "poi-hz-103",
+        "name": "西湖白堤",
+        "city": "杭州",
+        "district": "西湖区",
+        "same_city": false,
+        "rank": 3,
+        "category": "waterfront_walk",
+        "dedupe_key": "西湖白堤|西湖区北山街",
+        "is_diversity_slot": false,
+        "same_category_streak_index": 1,
+        "reason": "匹配点：该地点语义相关但存在跨城不确定性；场景价值：在同城不足时作为后置候选保持非阻断输出。",
+        "reason_template_id": "R3",
+        "confidence": "low",
+        "confidence_tag_visible": true
+      }
+    ],
+    "ranking_metadata": {
+      "candidate_count_mode": "insufficient",
+      "same_city_first": true,
+      "primary_sort_order": [
+        "semantic_match",
+        "preference_match",
+        "reachability",
+        "popularity"
+      ],
+      "popularity_as_fallback_only": true,
+      "cross_city_after_same_city": true
+    },
+    "output_views": {
+      "human_primary": "信息不足模式下输出 3 个低置信候选，同城项优先排列并保留一个跨城后置备选，请补充关键信息后重算。",
+      "machine_readable_appendix": {
+        "decision_refs": [
+          "D-02",
+          "D-17",
+          "D-18",
+          "D-19",
+          "D-20"
+        ],
+        "no_live_request": true
+      }
+    },
+    "metadata": {
+      "low_confidence_mode": true,
+      "risk_note": "当前排序基于不完整输入，候选可信度下降且仅用于临时决策。",
+      "supplement_suggestions": [
+        "请补充更精确的目的地关键词（如商圈或地标）",
+        "请补充时间窗与交通偏好（如步行优先或可接受换乘）"
+      ],
+      "insufficiency_marker": true,
+      "insufficiency_note": "关键信息缺失，已降级到信息不足候选模式。"
+    }
+  }
+}

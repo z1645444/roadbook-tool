@@ -14,13 +14,17 @@
 
 ### Validated
 
-(None yet — ship to validate)
+- [x] 将自然语言需求解析为结构化意图（起点、终点、途经点、偏好、预算、城市）
+  - Validated in Phase 1: 输入契约与缺失处理
+- [x] 输入缺失时在输出 A 段明确假设与缺失信息，不中断结果生成
+  - Validated in Phase 1: 输入契约与缺失处理
+- [x] 生成 3-5 个候选 POI，并给出可读的推荐理由
+  - Validated in Phase 2: POI 推荐策略
+- [x] 候选顺序支持后续路线构建，不出现冲突节点
+  - Validated in Phase 2: POI 推荐策略
 
 ### Active
 
-- [ ] 将自然语言需求解析为结构化意图（起点、终点、途经点、偏好、预算、城市）
-- [ ] 输入缺失时在输出 A 段明确假设与缺失信息，不中断结果生成
-- [ ] 生成 3-5 个候选 POI，并给出可读的推荐理由
 - [ ] 生成最终路线顺序，并给出每段方式与简要耗时
 - [ ] 输出可唤起高德的 `https://uri.amap.com/...` 完整链接，参数可用
 - [ ] 优先输出地址与二维码内容文本（二维码图片为可选能力）
@@ -42,6 +46,13 @@
 - 输出目标：可读、可执行、可复制，且在移动端有可预期的唤起行为
 - 交付形态：仓库内 skill 规范与提示模板，不是单独部署系统
 
+## Current State
+
+- Phase 1 complete: 输入契约与缺失处理
+- Phase 2 complete: POI 推荐策略
+- Phase 3 pending: 路线编排规则
+- 现阶段具备输入归一化契约、POI 策略与理由模板、POI 输出 schema 与双场景 example 工件
+
 ## Constraints
 
 - **Provider**: 高德优先 — 先用 `https://uri.amap.com/...`，仅在补充时给 scheme 链接
@@ -54,27 +65,19 @@
 
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
-| 先做跨 agent skill，再考虑独立应用 | 当前目标是复用到多个 agent runtime | — Pending |
-| 移除 Telegram 文案要求 | 新需求只关心地址与二维码输出 | — Pending |
-| 链接优先 `https://uri.amap.com/...` | Telegram/扫码场景兼容性更好 | — Pending |
-| 二维码能力按可用性降级 | 防止因为环境缺依赖导致输出失败 | — Pending |
+| 先做跨 agent skill，再考虑独立应用 | 当前目标是复用到多个 agent runtime | Active |
+| 移除 Telegram 文案要求 | 新需求只关心地址与二维码输出 | Active |
+| 链接优先 `https://uri.amap.com/...` | Telegram/扫码场景兼容性更好 | Active |
+| 二维码能力按可用性降级 | 防止因为环境缺依赖导致输出失败 | Active |
 
 ## Evolution
 
 This document evolves at phase transitions and milestone boundaries.
 
-**After each phase transition** (via `$gsd-transition`):
-1. Requirements invalidated? → Move to Out of Scope with reason
-2. Requirements validated? → Move to Validated with phase reference
-3. New requirements emerged? → Add to Active
-4. Decisions to log? → Add to Key Decisions
-5. "What This Is" still accurate? → Update if drifted
-
-**After each milestone** (via `$gsd-complete-milestone`):
-1. Full review of all sections
-2. Core Value check — still the right priority?
-3. Audit Out of Scope — reasons still valid?
-4. Update Context with current state
+**After each phase transition**:
+1. Requirements validated? → Move to Validated with phase reference
+2. Requirements changed? → Update Active/Out of Scope
+3. Current State drifted? → Refresh Current State section
 
 ---
-*Last updated: 2026-04-24 after scope update*
+*Last updated: 2026-04-26 after phase 2 completion*

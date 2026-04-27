@@ -7,21 +7,21 @@
 
 ### Intent Parsing
 
-- [ ] **INT-01**: User can provide natural language demand and get parsed trip intent fields
-- [ ] **INT-02**: User can omit optional fields and still receive complete structured output
-- [ ] **INT-03**: User receives explicit assumptions and missing information in section A
+- [x] **INT-01**: User can provide natural language demand and get parsed trip intent fields
+- [x] **INT-02**: User can omit optional fields and still receive complete structured output
+- [x] **INT-03**: User receives explicit assumptions and missing information in section A
 
 ### POI Recommendation
 
-- [ ] **POI-01**: User receives 3-5 candidate POIs aligned with stated preferences
-- [ ] **POI-02**: Each candidate POI includes concise recommendation reasoning
-- [ ] **POI-03**: Candidate POIs are ordered to support downstream route generation
+- [x] **POI-01**: User receives 3-5 candidate POIs aligned with stated preferences
+- [x] **POI-02**: Each candidate POI includes concise recommendation reasoning
+- [x] **POI-03**: Candidate POIs are ordered to support downstream route generation
 
 ### Routing Output
 
-- [ ] **ROUTE-01**: User receives final ordered route from start via stops to destination
-- [ ] **ROUTE-02**: Each route segment includes transport mode and concise duration estimate
-- [ ] **ROUTE-03**: Missing origin or destination is handled with explicit fallback assumptions
+- [x] **ROUTE-01**: User receives final ordered route from start via stops to destination
+- [x] **ROUTE-02**: Each route segment includes transport mode and concise duration estimate
+- [x] **ROUTE-03**: Missing origin or destination is handled with explicit fallback assumptions
 
 ### AMap Link Contract
 
@@ -62,15 +62,15 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| INT-01 | Phase 1 | Pending |
-| INT-02 | Phase 1 | Pending |
-| INT-03 | Phase 1 | Pending |
-| POI-01 | Phase 2 | Pending |
-| POI-02 | Phase 2 | Pending |
-| POI-03 | Phase 2 | Pending |
-| ROUTE-01 | Phase 3 | Pending |
-| ROUTE-02 | Phase 3 | Pending |
-| ROUTE-03 | Phase 3 | Pending |
+| INT-01 | Phase 1 | Complete |
+| INT-02 | Phase 1 | Complete |
+| INT-03 | Phase 1 | Complete |
+| POI-01 | Phase 2 | Complete |
+| POI-02 | Phase 2 | Complete |
+| POI-03 | Phase 2 | Complete |
+| ROUTE-01 | Phase 3 | Complete |
+| ROUTE-02 | Phase 3 | Complete |
+| ROUTE-03 | Phase 3 | Complete |
 | AMAP-01 | Phase 4 | Pending |
 | AMAP-02 | Phase 4 | Pending |
 | AMAP-03 | Phase 4 | Pending |
@@ -87,4 +87,4 @@
 
 ---
 *Requirements defined: 2026-04-24*
-*Last updated: 2026-04-24 after output-contract update*
+*Last updated: 2026-04-26 after phase 2 completion*

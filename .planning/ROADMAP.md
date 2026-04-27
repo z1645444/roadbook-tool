@@ -31,24 +31,34 @@ Success criteria:
 3. 解析结果可直接供 POI 推荐与路线拼接使用。
 
 Plans:
-- [ ] 01-01-PLAN.md — 固化输入契约与 A 段假设模板
-- [ ] 01-02-PLAN.md — 定义归一化输出 schema 与 example
+- [x] 01-01-PLAN.md — 固化输入契约与 A 段假设模板
+- [x] 01-02-PLAN.md — 定义归一化输出 schema 与 example
 
 ### Phase 2: POI 推荐策略
 Goal: 基于约束与偏好产出 3-5 个可解释的候选 POI。
 Requirements: POI-01, POI-02, POI-03
+**Plans:** 2 plans
 Success criteria:
 1. 候选 POI 数量保持在 3-5 个，且与用户意图一致。
 2. 每个 POI 都有简明且可核对的推荐理由。
 3. 候选顺序支持后续路线构建，不出现冲突节点。
 
+Plans:
+- [x] 02-01-PLAN.md — 固化 POI 候选策略与单句理由模板
+- [x] 02-02-PLAN.md — 定义 POI 输出 schema 与 normal/insufficient 示例
+
 ### Phase 3: 路线编排规则
 Goal: 输出按顺序可执行的路线方案，含每段方式与耗时。
 Requirements: ROUTE-01, ROUTE-02, ROUTE-03
+**Plans:** 2 plans
 Success criteria:
 1. 路线顺序完整覆盖起点、途经点、终点。
 2. 每段都明确交通方式和简要耗时。
 3. 起终点缺失时可通过假设策略继续生成有效路线说明。
+
+Plans:
+- [x] 03-01-PLAN.md — 固化路线编排规则与风险说明模板
+- [x] 03-02-PLAN.md — 定义路线输出 schema 与 normal/degraded 示例
 
 ### Phase 4: 高德链接构造
 Goal: 生成兼容聊天与扫码场景的高德可点击链接。

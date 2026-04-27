@@ -1,0 +1,262 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://roadbook-tool.local/schema/03-route-output.schema.json",
+  "title": "Phase 3 Route Output",
+  "type": "object",
+  "$comment": "ROUTE-01 ROUTE-02 ROUTE-03; D-01..D-13; no_live_request no_uri_construction no_qr_generation",
+  "required": [
+    "trip_context",
+    "route_plan",
+    "fallback_assumptions",
+    "output_views",
+    "metadata"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "trip_context": {
+      "type": "object",
+      "required": ["target_city", "input_status"],
+      "additionalProperties": false,
+      "properties": {
+        "target_city": {"type": "string", "minLength": 1},
+        "input_status": {"type": "string", "enum": ["complete", "incomplete", "conflicted"]},
+        "segment_mode_input": {
+          "type": "object",
+          "required": ["raw_text", "parse_confidence"],
+          "additionalProperties": false,
+          "properties": {
+            "raw_text": {"type": "string", "minLength": 1},
+            "parsed_segments": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["segment_index", "mode"],
+                "additionalProperties": false,
+                "properties": {
+                  "segment_index": {"type": "integer", "minimum": 1},
+                  "mode": {"type": "string", "enum": ["walking", "cycling", "driving", "transit"]}
+                }
+              }
+            },
+            "unmatched_segments_default_mode": {"type": "string", "const": "cycling"},
+            "parse_confidence": {"type": "string", "enum": ["high", "medium", "low"]}
+          }
+        }
+      }
+    },
+    "route_plan": {
+      "type": "object",
+      "required": ["ordered_points", "segments", "loop_detected", "budget_conflict", "route_adjustment", "decision_refs"],
+      "additionalProperties": false,
+      "properties": {
+        "ordered_points": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "type": "object",
+            "required": ["role", "name", "city"],
+            "additionalProperties": false,
+            "properties": {
+              "role": {"type": "string", "enum": ["origin", "waypoint", "destination"]},
+              "name": {"type": "string", "minLength": 1},
+              "city": {"type": "string", "minLength": 1}
+            }
+          }
+        },
+        "segments": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": [
+              "segment_index",
+              "from",
+              "to",
+              "mode",
+              "duration_note",
+              "mode_source",
+              "loop_flag",
+              "risk_note"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "segment_index": {"type": "integer", "minimum": 1},
+              "from": {"type": "string", "minLength": 1},
+              "to": {"type": "string", "minLength": 1},
+              "mode": {"type": "string", "enum": ["walking", "cycling", "driving", "transit"]},
+              "duration_note": {"type": "string", "minLength": 1},
+              "mode_source": {"type": "string", "enum": ["user", "fallback", "nl_parse"]},
+              "loop_flag": {"type": "boolean"},
+              "risk_note": {"type": "string", "minLength": 1}
+            }
+          }
+        },
+        "loop_detected": {"type": "boolean"},
+        "budget_conflict": {"type": "boolean"},
+        "route_adjustment": {"type": "string", "enum": ["none", "budget_precedence"]},
+        "decision_refs": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"type": "string", "pattern": "^D-(0[1-9]|1[0-3])$"},
+          "uniqueItems": true
+        }
+      }
+    },
+    "fallback_assumptions": {
+      "type": "object",
+      "required": ["origin_applied", "destination_applied"],
+      "additionalProperties": false,
+      "properties": {
+        "origin_applied": {"type": "boolean"},
+        "origin_source": {"type": "string", "enum": ["city_center"]},
+        "destination_applied": {"type": "boolean"},
+        "destination_source": {"type": "string", "enum": ["last_candidate_poi"]},
+        "a_section_note": {"type": "string", "minLength": 1},
+        "body_note": {"type": "string", "minLength": 1}
+      }
+    },
+    "output_views": {
+      "type": "object",
+      "required": ["human_primary", "machine_readable_appendix", "ag_sections"],
+      "additionalProperties": false,
+      "properties": {
+        "human_primary": {"type": "string", "minLength": 1},
+        "machine_readable_appendix": {
+          "type": "object",
+          "required": ["decision_refs", "no_live_request", "no_uri_construction", "no_qr_generation"],
+          "additionalProperties": false,
+          "properties": {
+            "decision_refs": {
+              "type": "array",
+              "minItems": 1,
+              "items": {"type": "string", "pattern": "^D-(0[1-9]|1[0-3])$"},
+              "uniqueItems": true
+            },
+            "no_live_request": {"type": "boolean", "const": true},
+            "no_uri_construction": {"type": "boolean", "const": true},
+            "no_qr_generation": {"type": "boolean", "const": true}
+          }
+        },
+        "ag_sections": {
+          "type": "object",
+          "required": ["A", "B", "C", "D", "E", "F", "G"],
+          "additionalProperties": false,
+          "properties": {
+            "A": {"type": "string", "minLength": 1},
+            "B": {"type": "string", "minLength": 1},
+            "C": {"type": "string", "minLength": 1},
+            "D": {"type": "string", "minLength": 1},
+            "E": {"type": "string", "minLength": 1},
+            "F": {"type": "string", "minLength": 1},
+            "G": {"type": "string", "minLength": 1}
+          }
+        }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "required": ["route_version", "created_at"],
+      "additionalProperties": false,
+      "properties": {
+        "route_version": {"type": "string", "minLength": 1},
+        "created_at": {"type": "string", "format": "date-time"}
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "trip_context": {
+            "properties": {
+              "segment_mode_input": {
+                "required": ["raw_text"]
+              }
+            },
+            "required": ["segment_mode_input"]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "trip_context": {
+            "properties": {
+              "segment_mode_input": {
+                "anyOf": [
+                  {"required": ["parsed_segments"]},
+                  {"required": ["unmatched_segments_default_mode"]}
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "fallback_assumptions": {
+            "properties": {
+              "origin_applied": {"const": true}
+            },
+            "required": ["origin_applied"]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "fallback_assumptions": {
+            "required": ["origin_source"],
+            "properties": {
+              "origin_source": {"const": "city_center"}
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "fallback_assumptions": {
+            "properties": {
+              "destination_applied": {"const": true}
+            },
+            "required": ["destination_applied"]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "fallback_assumptions": {
+            "required": ["destination_source"],
+            "properties": {
+              "destination_source": {"const": "last_candidate_poi"}
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "route_plan": {
+            "properties": {
+              "loop_detected": {"const": true},
+              "budget_conflict": {"const": true}
+            },
+            "required": ["loop_detected", "budget_conflict"]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "route_plan": {
+            "properties": {
+              "route_adjustment": {"const": "budget_precedence"}
+            }
+          }
+        }
+      }
+    }
+  ]
+}

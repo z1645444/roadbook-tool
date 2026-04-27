@@ -22,15 +22,22 @@
   - Validated in Phase 2: POI 推荐策略
 - [x] 候选顺序支持后续路线构建，不出现冲突节点
   - Validated in Phase 2: POI 推荐策略
+- [x] 生成最终路线顺序，并给出每段方式与简要耗时
+  - Validated in Phase 3: 路线编排规则
+- [x] 输出可唤起高德的 `https://uri.amap.com/...` 完整链接，参数可用
+  - Validated in Phase 4: 高德链接构造
+- [x] 优先输出地址与二维码内容文本（二维码图片为可选能力）
+  - Validated in Phase 5: 地址与二维码输出协议
+- [x] 当二维码生成不可保证时，降级为仅输出地址并给出说明
+  - Validated in Phase 5: 地址与二维码输出协议
+- [x] Skill 结果遵循稳定输出协议，便于多 agent 消费
+  - Validated in Phase 5: 地址与二维码输出协议
 
 ### Active
 
-- [ ] 生成最终路线顺序，并给出每段方式与简要耗时
-- [ ] 输出可唤起高德的 `https://uri.amap.com/...` 完整链接，参数可用
-- [ ] 优先输出地址与二维码内容文本（二维码图片为可选能力）
-- [ ] 当二维码生成不可保证时，降级为仅输出地址并给出说明
 - [ ] 输出失败兜底说明，覆盖内置浏览器无法唤起等常见场景
-- [ ] Skill 结果遵循稳定输出协议，便于多 agent 消费
+- [ ] 下一里程碑重置主输出契约：路线摘要、地址、预计花费时间、其他说明（移除二维码字段）
+- [ ] 同步清理 A-G 与“主契约字段”冲突口径，确保单一真相
 
 ### Out of Scope
 
@@ -50,8 +57,10 @@
 
 - Phase 1 complete: 输入契约与缺失处理
 - Phase 2 complete: POI 推荐策略
-- Phase 3 pending: 路线编排规则
-- 现阶段具备输入归一化契约、POI 策略与理由模板、POI 输出 schema 与双场景 example 工件
+- Phase 3 complete: 路线编排规则
+- Phase 4 complete: 高德链接构造
+- Phase 5 complete: 地址与二维码输出协议
+- v1.0 shipped: 已形成可复用 skill 文档资产（协议、模板、schema、example、checklist）
 
 ## Constraints
 
@@ -69,6 +78,14 @@
 | 移除 Telegram 文案要求 | 新需求只关心地址与二维码输出 | Active |
 | 链接优先 `https://uri.amap.com/...` | Telegram/扫码场景兼容性更好 | Active |
 | 二维码能力按可用性降级 | 防止因为环境缺依赖导致输出失败 | Active |
+| v1.0 结束后归档 roadmap/requirements | 控制上下文体积并保留历史快照 | Shipped |
+| 下一里程碑移除二维码主契约 | 解决文档口径冲突并收敛输出字段 | Planned |
+
+## Next Milestone Goals
+
+- 完成“移除二维码主契约”迁移，保留地址必达与可复制性。
+- 统一 `PROJECT/ROADMAP/REQUIREMENTS/AGENTS` 对输出结构的表述。
+- 为新主契约补齐新的 schema/example/checklist。
 
 ## Evolution
 
@@ -80,4 +97,4 @@ This document evolves at phase transitions and milestone boundaries.
 3. Current State drifted? → Refresh Current State section
 
 ---
-*Last updated: 2026-04-26 after phase 2 completion*
+*Last updated: 2026-04-27 after v1.0 milestone*

@@ -1,95 +1,32 @@
 # Roadmap: 高德路线助手 Skill
 
-**Generated:** 2026-04-24
-**Project:** 高德路线助手 Skill
-**Granularity:** Standard
+## Milestones
 
-## Overview
+- ✅ **v1.0 milestone** — Phases 1-5 (shipped 2026-04-27)
 
-- Phases: 5
-- v1 Requirements: 17
-- Coverage: 100%
-- Execution mode: Parallel plans allowed
+## Phases
 
-| # | Phase | Goal | Requirements | Success Criteria |
-|---|-------|------|--------------|------------------|
-| 1 | 输入契约与缺失处理 | 把自然语言输入稳定转换为结构化上下文与假设 | INT-01, INT-02, INT-03 | 3 |
-| 2 | POI 推荐策略 | 输出稳定的 3-5 候选 POI 与理由 | POI-01, POI-02, POI-03 | 3 |
-| 3 | 路线编排规则 | 生成可执行顺序路线与分段耗时说明 | ROUTE-01, ROUTE-02, ROUTE-03 | 3 |
-| 4 | 高德链接构造 | 生成可唤起高德的 URI HTTPS 链接并满足约束 | AMAP-01, AMAP-02, AMAP-03, AMAP-04 | 4 |
-| 5 | 地址与二维码输出协议 | 输出地址与二维码文本，支持二维码能力降级 | OUT-01, OUT-02, OUT-03, OUT-04 | 4 |
+<details>
+<summary>✅ v1.0 milestone (Phases 1-5) — SHIPPED 2026-04-27</summary>
 
-## Phase Details
+- [x] Phase 1: 输入契约与缺失处理 (2/2 plans) — completed 2026-04-27
+- [x] Phase 2: POI 推荐策略 (2/2 plans) — completed 2026-04-27
+- [x] Phase 3: 路线编排规则 (2/2 plans) — completed 2026-04-27
+- [x] Phase 4: 高德链接构造 (2/2 plans) — completed 2026-04-27
+- [x] Phase 5: 地址与二维码输出协议 (2/2 plans) — completed 2026-04-27
 
-### Phase 1: 输入契约与缺失处理
-Goal: 把用户自然语言和可选参数规范化为可下游处理的数据结构。
-Requirements: INT-01, INT-02, INT-03
-**Plans:** 2 plans
-Success criteria:
-1. 输入字段缺失时不会中断，且 A 段输出包含明确假设。
-2. 城市、偏好、交通方式等关键字段有确定优先级与默认值。
-3. 解析结果可直接供 POI 推荐与路线拼接使用。
+</details>
 
-Plans:
-- [x] 01-01-PLAN.md — 固化输入契约与 A 段假设模板
-- [x] 01-02-PLAN.md — 定义归一化输出 schema 与 example
+## Progress
 
-### Phase 2: POI 推荐策略
-Goal: 基于约束与偏好产出 3-5 个可解释的候选 POI。
-Requirements: POI-01, POI-02, POI-03
-**Plans:** 2 plans
-Success criteria:
-1. 候选 POI 数量保持在 3-5 个，且与用户意图一致。
-2. 每个 POI 都有简明且可核对的推荐理由。
-3. 候选顺序支持后续路线构建，不出现冲突节点。
+| Phase | Milestone | Plans Complete | Status | Completed |
+|---|---|---|---|---|
+| 1. 输入契约与缺失处理 | v1.0 | 2/2 | Complete | 2026-04-27 |
+| 2. POI 推荐策略 | v1.0 | 2/2 | Complete | 2026-04-27 |
+| 3. 路线编排规则 | v1.0 | 2/2 | Complete | 2026-04-27 |
+| 4. 高德链接构造 | v1.0 | 2/2 | Complete | 2026-04-27 |
+| 5. 地址与二维码输出协议 | v1.0 | 2/2 | Complete | 2026-04-27 |
 
-Plans:
-- [x] 02-01-PLAN.md — 固化 POI 候选策略与单句理由模板
-- [x] 02-02-PLAN.md — 定义 POI 输出 schema 与 normal/insufficient 示例
+## Archive
 
-### Phase 3: 路线编排规则
-Goal: 输出按顺序可执行的路线方案，含每段方式与耗时。
-Requirements: ROUTE-01, ROUTE-02, ROUTE-03
-**Plans:** 2 plans
-Success criteria:
-1. 路线顺序完整覆盖起点、途经点、终点。
-2. 每段都明确交通方式和简要耗时。
-3. 起终点缺失时可通过假设策略继续生成有效路线说明。
-
-Plans:
-- [x] 03-01-PLAN.md — 固化路线编排规则与风险说明模板
-- [x] 03-02-PLAN.md — 定义路线输出 schema 与 normal/degraded 示例
-
-### Phase 4: 高德链接构造
-Goal: 生成兼容聊天与扫码场景的高德可点击链接。
-Requirements: AMAP-01, AMAP-02, AMAP-03, AMAP-04
-**Plans:** 2 plans
-Success criteria:
-1. 地址段始终输出完整 `https://uri.amap.com/...` 链接。
-2. 链接参数正确编码，且包含 `callnative=1`。
-3. 坐标出现时默认按 GCJ-02 约定表达。
-4. 若附带 scheme，必须提供 https 兜底链接。
-
-Plans:
-- [x] 04-01-PLAN.md — 固化高德 URI 参数契约与 L0/L1..Ln 生成算法
-- [x] 04-02-PLAN.md — 构建链接示例集与可执行验证清单
-
-### Phase 5: 地址与二维码输出协议
-Goal: 固化跨 agent 一致输出结构，二维码不可保证时降级地址输出。
-Requirements: OUT-01, OUT-02, OUT-03, OUT-04
-**Plans:** 2 plans
-Success criteria:
-1. 输出明确包含地址段，且可直接拷贝使用。
-2. 在脚本能力可用时输出二维码文本（与地址一致）。
-3. 二维码相关失败不阻断主流程，必须降级为地址-only。
-4. 输出中明确说明“二维码可选/地址必达”的策略。
-
-Plans:
-- [x] 05-01-PLAN.md — 固化地址与二维码输出协议及 A-G 兼容模板
-- [x] 05-02-PLAN.md — 定义输出 schema、示例与可执行验证清单
-
-## Notes
-
-- This roadmap targets a reusable skill package for multiple agent runtimes.
-- Not a standalone app milestone.
-- Live API calls are intentionally excluded in this initialization scope.
+- v1.0 roadmap archive: [.planning/milestones/v1.0-ROADMAP.md](.planning/milestones/v1.0-ROADMAP.md)

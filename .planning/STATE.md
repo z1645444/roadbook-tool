@@ -2,8 +2,8 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: unknown
-last_updated: "2026-04-27T08:09:32.284Z"
+status: v1.0 milestone complete
+last_updated: "2026-04-27T08:20:07.336Z"
 progress:
   total_phases: 5
   completed_phases: 5
@@ -31,7 +31,8 @@ See: .planning/PROJECT.md (updated 2026-04-26)
 - Phase 3 execution: complete
 - Phase 4 execution: complete
 - Phase 5 execution: complete
-- Next command: `$gsd-complete-milestone`
+- Milestone v1.0 archived: complete
+- Next command: `$gsd-new-milestone`
 
 ## Scope Guardrails
 
@@ -42,3 +43,11 @@ See: .planning/PROJECT.md (updated 2026-04-26)
 **Completed Phase:** 5 (address-and-qr-output-protocol) — 2/2 plans complete — 2026-04-27
 
 **Planned Phase:** None (all roadmap phases complete in v1.0).
+
+## Deferred Items
+
+Items acknowledged and deferred at milestone close on 2026-04-27:
+
+| Category | Item | Status |
+|----------|------|--------|
+| todo | 2026-04-27-milestone-a-g-output-contract-remove-qr | pending |

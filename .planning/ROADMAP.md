@@ -61,8 +61,8 @@ Success criteria:
 4. 若附带 scheme，必须提供 https 兜底链接。
 
 Plans:
-- [ ] 04-01-PLAN.md — 固化高德 URI 参数契约与 L0/L1..Ln 生成算法
-- [ ] 04-02-PLAN.md — 构建链接示例集与可执行验证清单
+- [x] 04-01-PLAN.md — 固化高德 URI 参数契约与 L0/L1..Ln 生成算法
+- [x] 04-02-PLAN.md — 构建链接示例集与可执行验证清单
 
 ### Phase 5: 地址与二维码输出协议
 Goal: 固化跨 agent 一致输出结构，二维码不可保证时降级地址输出。

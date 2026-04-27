@@ -25,10 +25,14 @@
 
 ### AMap Link Contract
 
-- [ ] **AMAP-01**: User receives a complete clickable `https://uri.amap.com/...` URL
-- [ ] **AMAP-02**: URL output includes `callnative=1` and URL-encoded parameters
-- [ ] **AMAP-03**: Coordinate references follow GCJ-02 assumptions when coordinates are present
-- [ ] **AMAP-04**: If scheme links are provided, user also receives an `https` fallback link
+- [x] **AMAP-01
+**: User receives a complete clickable `https://uri.amap.com/...` URL
+- [x] **AMAP-02
+**: URL output includes `callnative=1` and URL-encoded parameters
+- [x] **AMAP-03
+**: Coordinate references follow GCJ-02 assumptions when coordinates are present
+- [x] **AMAP-04
+**: If scheme links are provided, user also receives an `https` fallback link
 
 ### Address and QR Output
 

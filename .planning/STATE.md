@@ -2,14 +2,14 @@
 gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: output-contract-reset
-status: executing
-last_updated: "2026-04-27T09:49:00.000Z"
+status: unknown
+last_updated: "2026-04-28T09:09:51.061Z"
 progress:
-  total_phases: 8
+  total_phases: 7
   completed_phases: 6
-  total_plans: 16
+  total_plans: 12
   completed_plans: 12
-  percent: 75
+  percent: 100
 ---
 
 # STATE
